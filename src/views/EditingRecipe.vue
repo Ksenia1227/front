@@ -1,27 +1,39 @@
 <template>
   <div class="recipe-container">
     <div class="recipe-header">
-      <div v-html="logOutIcon" class="home-icon" @click="goBack"></div>
+    <div v-html="logOutIcon" class="home-icon" @click="goBack"></div>
+    <h1>Редактирование рецепта</h1> 
       <form @submit.prevent="submitRecipe">
-        <div v-if="recipes && ingredients && recipes.name && ingredients.length" class="head">
-          <my-input v-model:value="recipes.name"></my-input>
-          <my-input v-model:value="recipes.description"></my-input>
-
+        <div v-if="recipes && ingredients && recipes.name" class="head">
+          <div class="input-recipe"> 
+          <textarea placeholder="Введите название рецепта" v-model="recipes.name" required>
+          </textarea>
+        </div> 
+        <div class="input-description"> 
+        <textarea v-model="recipes.description" placeholder="Введите описание рецепта" required>
+          </textarea>
+        </div> 
+        <div class="file"> 
           <input
             type="file"
             ref="photo"
             @change="onFileChange"
             accept="image/*"
           />
-
+          <label>*Если файл не выбран, устанавливается старый</label>
+           </div>
+           <h2>Ингредиенты:</h2>
           <div v-for="(ingredient, index) in ingredients" :key="index" class="ingredient-group">
             <my-input v-model:value="ingredient.name"></my-input>
             <my-input v-model:value="ingredient.number"></my-input>
-            <button type="button" @click="deleteIngredient(ingredient.id, index)">Удалить ингредиент</button>
+            <button type="button" @click="deleteIngredient(ingredient.id, index)" class="remove-btn">Удалить ингредиент</button>
           </div>
-
-          <button type="button" @click="addIngredient()">Добавить ингредиент</button>
-          <my-button type="submit">Добавить изменения</my-button>
+          <div class="button_recipe"> 
+          <button type="button" @click="addIngredient()" class = "add-ingredient-btn">Добавить ингредиент</button>
+          </div>
+          <div class="submit"> 
+          <my-button type="submit" class="submit-btn">Добавить изменения</my-button>
+        </div>
         </div>
 
         <div v-else class="loading">Загружается...</div>
@@ -68,8 +80,6 @@ export default {
       this.ingredients.push({name:"", number:""})
     },
   async submitRecipe() {
-    console.log("VVVVVVV")
-      console.log(this.recipes.photo)
       this.updateRecipeByUid({
       name: this.recipes.name,
       description: this.recipes.description,
@@ -92,31 +102,113 @@ export default {
 
 <style scoped>
 .recipe-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-image: url('@/assets/789.jpg');
+  background-color: rgba(73, 73, 73, 0.8);  
+  opacity:0.9; 
+  background-size: cover; 
+  background-position: center; 
+  min-height: 100vh; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
 }
 .head {
   padding: 20px;
 }
 .recipe-header {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.95);  
+  padding: 40px; 
+  border-radius: 12px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  width: 600px; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 30px; 
   position: relative;
-  text-align: center;
+}
+h1 { 
+  text-align: center; 
+  font-size: 30px; 
+  color: #333;  
+  font-weight: 700; 
+  margin-bottom: 5px; 
+}
+h2 { 
+  text-align: center; 
+  font-size: 22px; 
+  color: #333;  
+  font-weight: 600; 
+  margin-bottom: 20px; 
+}
+.input-recipe, 
+.input-description, 
+.file { 
+  display: flex; 
+  flex-direction: column; 
+  margin-bottom: 20px; 
+}
+textArea{
+  border-radius: 12px; 
+  padding: 10px;
+  font-size: 14px; 
+  gap:10px;
+}
+.ingredient-group { 
+  display: flex; 
+  margin-bottom: 10px; 
+  gap: 15px; 
+} 
+.add-ingredient-btn, 
+.submit-btn { 
+  padding: 15px 80px; 
+  font-size: 16px; 
+  background-color: rgb(40, 165, 42); 
+  color: white; 
+  border: none; 
+  cursor: pointer; 
+  border-radius: 8px; 
+  transition: background-color 0.3s ease, transform 0.3s ease; 
+}
+
+.add-ingredient-btn:hover, 
+.submit-btn:hover { 
+  background-color: rgb(20, 75, 23); 
+  transform: scale(1.05); 
+}
+.remove-btn { 
+  padding: 5px 10px; 
+  font-size: 12px; 
+  background-color: rgb(179, 22, 56); 
+  color: white; 
+  border: none; 
+  cursor: pointer; 
+  border-radius: 5px; 
+  transition: background-color 0.3s ease, transform 0.3s ease; 
+}
+
+.remove-btn:hover { 
+  background-color: rgb(69, 90, 160); 
+  transform: scale(1.05); 
+}
+.button_recipe { 
+  display: flex; 
+  justify-content: center; 
   margin-bottom: 20px;
+  margin-top: 40px;
+}
+
+.submit { 
+  display: flex; 
+  justify-content: center; 
 }
 .home-icon {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 20px;
+  left: 20px;
   width: 40px; 
   height: 40px; 
 }
-.ingredient-group {
-  display: flex;
-  margin-bottom: 10px;
-}
-
 </style>

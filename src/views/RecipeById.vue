@@ -2,20 +2,13 @@
   <div class="recipe-container">
     <div class="recipe-header">
     <div v-html="logOutIcon" class="home-icon" @click="goBack" ></div>
-
     <div class="heart" @click="addFavourite">
-  {{ favourite ? 'Добавлено' : 'Добавить' }}
-     </div>
-<div>
-      <h3>Сохраненнные данные</h3>
-      <pre>{{favourite}}</pre>
+        <i :class="favourite ? 'fas fa-heart' : 'far fa-heart'"></i>
       </div>
-    <h1 class="recipe-title">Рецепт</h1>
-      <h1 class="recipe-title">{{ recipes.name }}</h1>
-      <p class="recipe-description">{{ recipes.description }}</p>
-    </div>
 
-     <div class="ingredients-section">
+
+      <h1 class="recipe-title">{{ recipes.name }}</h1>
+      <div class="ingredients-section">
       <h3 class="ingredients-title">Ингредиенты:</h3>
       <ul class="ingredients-list">
         <li class="ingredient-item" v-for="ingredient in ingredients" :key="ingredient.id">
@@ -23,7 +16,7 @@
         </li>
       </ul>
     </div>
-
+      <p class="recipe-description">{{ recipes.description }}</p>
     <div class="recipe-image-container">
       <img :src="`${serverUrl}/${recipes.photo}`" alt="Рецепт" class="recipe-image"  />
     </div>
@@ -31,6 +24,7 @@
      <h3>Удалить </h3>
      </div>
       <div v-if = "res" class="editing" @click="editingRecipe"> <h3>Редактировать</h3>
+     </div>
      </div>
   </div>
 </template>
@@ -89,44 +83,69 @@ export default {
 
 <style scoped>
 .recipe-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-image: url('@/assets/789.jpg');
+  background-color: rgba(73, 73, 73, 0.8);   
+  opacity: 0.9;  
+  background-size: cover;  
+  background-position: center;  
+  min-height: 100vh;  
+  display: flex;  
+  justify-content: center;  
+  align-items: center;
 }
 
 .recipe-header {
-  position: relative;
+  position: relative; 
   text-align: center;
-  margin-bottom: 20px;
+  width: 900px;  
+  border-radius: 12px;  
+  background-color: #f9f9f9; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  
+  display: flex;  
+  flex-direction: column;  
+  padding: 20px;
 }
-.home-icon {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 40px; 
-  height: 40px; 
+
+.home-icon { 
+  position: absolute; 
+  top: 20px; 
+  left: 10px; 
+  width: 40px;  
+  height: 40px;  
 }
-.heart{
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 50px; 
-  height: 50px; 
+
+.heart {
+  position: absolute; 
+  top: 20px; 
+  right: 30px; 
+  font-size: 35px;  
+  cursor: pointer;
 }
-.recipe-title {
-  font-size: 36px;
+
+.heart i {
+  color: red;
+}
+
+.ingredients-title {
+  font-size: 22px;
+  margin-right: 10px;
   font-weight: bold;
-  color: #333;
+}
+
+.ingredients-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ingredient-item {
+  font-size: 20px;
 }
 
 .recipe-description {
-  font-size: 18px;
-  color: #555;
-  margin-top: 10px;
-  line-height: 1.5;
+  text-align: justify; 
+  font-size: 20px;
+  margin: 20px 10px; 
 }
 
 .recipe-image-container {
@@ -138,28 +157,16 @@ export default {
   max-width: 100%;
   height: auto;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.ingredients-section {
-  margin-top: 30px;
+.delete, .editing {
+  cursor: pointer;
+  text-align: center;
+   font-size: 20px;
 }
-
-.ingredients-title {
-  font-size: 24px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.ingredients-list {
-  list-style-type: none;
-  padding: 0;
-}
-
-.ingredient-item {
-  font-size: 18px;
-  color: #666;
-  margin-bottom: 8px;
+.recipe-title {
+  font-size: 40px;
+  margin-right: 10px;
+  font-weight: bold;
 }
 </style>

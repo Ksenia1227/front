@@ -7,7 +7,7 @@ import AddRecipe from '../views/AddRecipe.vue'
 import Favourite from '../views/FavouriteView.vue'
 import RecipeById from '../views/RecipeById.vue'
 import EditingRecipe from '../views/EditingRecipe.vue'
-// import instance from '@/middlewares'
+import instance from '@/middlewares'
 
 const routes = [
   {
@@ -18,7 +18,8 @@ const routes = [
   {
     path: '/main',
     name: 'mainPage',
-    component: AboutView
+    component: AboutView,
+    meta: { auth: true }
   },
   {
     path: '/',
@@ -56,22 +57,22 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
-// router.beforeEach(async (to, from, next) => {
-//   try {
-//     const requireAuth = to.matched.some(record => record?.meta.auth)
-//     if (requireAuth) {
-//       const response = await instance.get('/api/user/user')
-//       console.log(response.status)
-//       if (response.status == 200 ) {
-//         return next()
-//       } else if (response.status == 403 & response.status == 401 ) {
-//         return next('/')
-//       }
-//     }
-//     return next()
-//   } catch (error) {
-//     return next('/')
-//   }
-// })
+router.beforeEach(async (to, from, next) => {
+  try {
+    const requireAuth = to.matched.some(record => record?.meta.auth)
+    if (requireAuth) {
+      const response = await instance.get('/api/user/user')
+      console.log(response.status)
+      if (response.status == 200 ) {
+        return next()
+      } else if (response.status == 414 ) {
+        return next('/')
+      }
+    }
+    return next()
+  } catch (error) {
+    return next('/')
+  }
+})
 
 export default router

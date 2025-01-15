@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import components from './components/UI'
+import '@fortawesome/fontawesome-free/css/all.css';
 
 const app = createApp(App)
 // создаёт новый экземпляр приложения, используя компонент App.vue как корневой компонент.

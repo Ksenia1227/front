@@ -1,106 +1,184 @@
-<template>
-  <div class="add-recipe-page">
-    <h2>Добавить новый рецепт</h2>
-    <form @submit.prevent="submitRecipe">
+<template> 
+  <div class="add-recipe-page"> 
+    <div class="form-container"> 
+      <h1>Новый рецепт</h1> 
+      <form @submit.prevent="submitRecipe"> 
+        <div class="input-recipe"> 
+          <textarea placeholder="Введите название рецепта" v-model="name" required>
+          </textarea>
+        </div> 
+        <div class="input-description"> 
+        <textarea v-model="description" placeholder="Введите описание рецепта" required>
+          </textarea>
+        </div> 
+        <div class="file"> 
+          <input 
+            type="file" 
+            ref="photo" 
+            @change="onFileChange" 
+            accept="image/*" 
+            required 
+          /> 
+        </div> 
+        <h2>Ингредиенты:</h2>
+        <div v-for="(ingredient, index) in ingredients" :key="index" class="ingredient-group"> 
+          <my-input placeholder="Введите название" v-model:value="ingredients[index].name" required></my-input> 
+          <my-input placeholder="Введите количество" v-model:value="ingredients[index].number" required></my-input> 
+          <button type="button" @click="removeIngredient(index)" class="remove-btn">Удалить ингредиент</button> 
+        </div> 
+        <div class="button_recipe"> 
+          <button type="button" @click="addIngredient()" class="add-ingredient-btn">Добавить ингредиент</button> 
+        </div> 
+        <div class="submit"> 
+          <my-button type="submit" class="submit-btn">Добавить рецепт</my-button> 
+        </div>
+      </form> 
+    </div> 
+  </div> 
+</template> 
 
-      <!-- Поле для названия рецепта -->
-      <my-input placeholder="Введите название рецепта" v-model:value="name" required ></my-input>
-      
-      <!-- Поле для описания рецепта -->
-       <my-input placeholder="Введите описание рецепта" v-model:value="description" required></my-input>
+<script> 
+import { mapActions } from 'vuex' 
 
-      <!-- Поле для загрузки фото -->
-      <input 
-        type="file"
-        ref="photo"
-        @change="onFileChange"
-        accept="image/*"
-        required
-      />
+export default { 
+  name: 'addRecipePage', 
+  data() { 
+    return { 
+      name: '', 
+      description: '', 
+      photo: null, 
+      ingredients: [{name: "", number:""}], 
+    } 
+  }, 
+  methods: { 
+    ...mapActions({ 
+      addRecipe: 'addRecipe/addRecipe', 
+    }), 
+    onFileChange() { 
+      this.photo = this.$refs.photo.files[0]; 
+    }, 
 
-<!-- Динамическое добавление ингредиентов -->
-      <div v-for="(ingredient, index) in ingredients" :key="index" class="ingredient-group">
-        <my-input placeholder="Введите название ингредиента" v-model:value="ingredients[index].name" required></my-input>
-        <my-input placeholder="Введите количество ингредиента" v-model:value="ingredients[index].number" required></my-input>
-        <button type="button" @click="removeIngredient(index)">Удалить ингредиент</button>
-      </div>
-        <button type="button" @click="addIngredient()">Добавить ингредиент</button>
+    addIngredient() { 
+      this.ingredients.push({name:"", number:""}) 
+    }, 
 
-      <div>
-      <h3>Сохраненнные данные</h3>
-      <pre>{{ingredients}}</pre>
-      </div>
+    removeIngredient(index) { 
+      this.ingredients.splice(index, 1) 
+    }, 
 
-      <!-- Кнопка отправки формы -->
-      <my-button type="submit">Добавить рецепт</my-button>
-    </form>
-  </div>
-</template>
-
-<script>
-import { mapActions } from 'vuex'
-
-export default {
-  name: 'addRecipePage',
-  data() {
-    return {
-      name: '',
-      description: '',
-      photo: null,
-      ingredients: [{name: "", number:""}],
+    async submitRecipe() { 
+      this.addRecipe({ 
+        name: this.name, 
+        description: this.description, 
+        ingredients: this.ingredients, 
+        photo: this.photo 
+      }) 
     }
-  },
-  methods: {
-    ...mapActions({
-      addRecipe: 'addRecipe/addRecipe',
-    }),
-    onFileChange() {
-      this.photo = this.$refs.photo.files[0];
-    },
+  } 
+} 
+</script> 
 
-    addIngredient() {
-      this.ingredients.push({name:"", number:""})
-    },
-    
-    removeIngredient(index) {
-      this.ingredients.splice(index, 1)
-    },
-
-    async submitRecipe() {
-      this.addRecipe({
-      name: this.name,
-      description: this.description,
-      ingredients: this.ingredients,
-      photo: this.photo })
-    }
-  }
-}
-</script>
-
-<style scoped>
+<style scoped> 
 .add-recipe-page {
-  padding: 20px;
+  background-image: url('@/assets/789.jpg');
+  background-color: rgba(73, 73, 73, 0.8); 
+  background-size: cover;  
+  opacity:0.9; 
+  background-position: center; 
+  min-height: 100vh; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+} 
+
+.form-container { 
+  background-color: rgba(255, 255, 255, 0.95);  
+  padding: 40px; 
+  border-radius: 12px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  width: 600px; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 30px; 
+} 
+h1 { 
+  text-align: center; 
+  font-size: 30px; 
+  color: #333;  
+  font-weight: 700; 
+  margin-bottom: 10px; 
+}
+h2 { 
+  text-align: center; 
+  font-size: 22px; 
+  color: #333;  
+  font-weight: 600; 
+  margin-bottom: 20px; 
 }
 
-.ingredient-group {
-  display: flex;
-  margin-bottom: 10px;
+.input-recipe, 
+.input-description, 
+.file { 
+  display: flex; 
+  flex-direction: column; 
+  margin-bottom: 20px; 
+}
+textArea{
+  border-radius: 12px; 
+  padding: 10px;
+  font-size: 14px; 
+  gap:10px;
 }
 
-.ingredient-group my-input {
-  margin-right: 10px;
+.ingredient-group { 
+  display: flex; 
+  margin-bottom: 10px; 
+  gap: 15px; 
+} 
+
+.add-ingredient-btn, 
+.submit-btn { 
+  padding: 15px 80px; 
+  font-size: 16px; 
+  background-color: rgb(40, 165, 42); 
+  color: white; 
+  border: none; 
+  cursor: pointer; 
+  border-radius: 8px; 
+  transition: background-color 0.3s ease, transform 0.3s ease; 
 }
 
-button {
-  padding: 10px 20px;
-  background-color:rgb(152, 25, 52);
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
+.add-ingredient-btn:hover, 
+.submit-btn:hover { 
+  background-color: rgb(20, 75, 23); 
+  transform: scale(1.05); 
 }
 
-button:hover {
-  background-color:rgb(69, 90, 160);
+.remove-btn { 
+  padding: 5px 10px; 
+  font-size: 12px; 
+  background-color: rgb(179, 22, 56); 
+  color: white; 
+  border: none; 
+  cursor: pointer; 
+  border-radius: 5px; 
+  transition: background-color 0.3s ease, transform 0.3s ease; 
+}
+
+.remove-btn:hover { 
+  background-color: rgb(69, 90, 160); 
+  transform: scale(1.05); 
+}
+
+.button_recipe { 
+  display: flex; 
+  justify-content: center; 
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.submit { 
+  display: flex; 
+  justify-content: center; 
 }
 </style>

@@ -16,10 +16,7 @@ export default {
     actions: {
            async getRecipes({ commit }) {
             const recipes = await instance.get('/api/recipe/recipes')
-            console.log(recipes.data)
             recipes.data.reverse()
-            console.log("LKLKKKLKLKKKLKL")
-            console.log(recipes.data)
             if (recipes) return commit('setRecipes', recipes.data)
             return
         },

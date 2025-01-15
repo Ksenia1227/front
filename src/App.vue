@@ -1,11 +1,11 @@
 <template>
   <nav>
-    <router-link v-if="!isAuth" to="/">Вход</router-link> |
-    <router-link to="/main">Главная</router-link> |
-    <router-link to="/userPage">Моя страница</router-link> |
-    <router-link v-if="isAuth" to="/addRecipe">Добавить рецепт</router-link> |
-    <router-link v-if="isAuth" to="/favourite">Избранное</router-link> |
-    <router-link v-if="isAuth" to="/" @click="logout()">Выйти</router-link> 
+    <router-link v-if="!isAuth" to="/" class="nav-link">Вход</router-link>
+    <router-link to="/main" class="nav-link">Главная</router-link>
+    <router-link v-if="isAuth" to="/userPage" class="nav-link">Моя страница</router-link>
+    <router-link v-if="isAuth" to="/addRecipe" class="nav-link">Добавить рецепт</router-link>
+    <router-link v-if="isAuth" to="/favourite" class="nav-link">Избранное</router-link>
+    <router-link v-if="isAuth" to="/" @click="logout" class="nav-link">Выйти</router-link>
   </nav>
   <router-view />
 </template>
@@ -15,7 +15,6 @@ import { mapState, mapActions } from 'vuex'
 export default {
   methods: {
     ...mapActions({
-      // функция позволяет вам маппировать (привязывать) действия из хранилища (store) Vuex к методам компонента Vue
       logout: 'auth/logout'
     })
   },
@@ -25,31 +24,34 @@ export default {
   },
   computed: {
     ...mapState({ 
-      // функция позволяет маппировать (привязывать) состояние из хранилища (store) Vuex в вычисляемые свойства вашего компонента Vue
       isAuth: state => state.auth.isAuth
     })
   }
 }
 </script>
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
+<style scoped>
 nav {
-  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color:rgb(41, 42, 42); 
+  padding: 10px 0;
 }
 
-nav a {
+.nav-link {
   font-weight: bold;
-  color: #2c3e50;
+  color:rgb(236, 232, 232);
+  margin: 0 15px;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
-nav a.router-link-exact-active {
-  color: #42b983;
+.nav-link:hover {
+  color:rgb(54, 206, 100); 
+}
+
+.nav-link.router-link-exact-active {
+  color:rgb(54, 206, 100); 
 }
 </style>
