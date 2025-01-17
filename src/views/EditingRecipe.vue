@@ -1,7 +1,9 @@
 <template>
-  <div class="recipe-container">
+  <div class="home">
     <div class="recipe-header">
-    <div v-html="logOutIcon" class="home-icon" @click="goBack"></div>
+    <div class="home-icon" @click="goBack">
+  <i class="fas fa-arrow-left"></i> 
+</div>
     <h1>Редактирование рецепта</h1> 
       <form @submit.prevent="submitRecipe">
         <div v-if="recipes && ingredients && recipes.name" class="head">
@@ -70,7 +72,10 @@ export default {
       this.$router.go(-1); 
     },
     async deleteIngredient(id, index) {
+      console.log(id)
+      if(id){
         await this.deleteIngredientById(id);
+      }
         this.ingredients.splice(index, 1);
   },
   onFileChange() {
@@ -95,30 +100,22 @@ export default {
      this.getIngredientsById(recipeId);
     },
   async mounted() {
- 
   },
 };
 </script>
 
 <style scoped>
-.recipe-container {
-  background-image: url('@/assets/789.jpg');
-  background-color: rgba(73, 73, 73, 0.8);  
-  opacity:0.9; 
+.home {
+  padding: 20px;
+  background-color:rgb(122, 122, 122);
+  background-image: url('@/assets/569.jpg');
   background-size: cover; 
   background-position: center; 
   min-height: 100vh; 
-  display: flex; 
-  justify-content: center; 
-  align-items: center; 
-}
-.head {
-  padding: 20px;
 }
 .recipe-header {
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
   background-color: rgba(255, 255, 255, 0.95);  
   padding: 40px; 
   border-radius: 12px; 
@@ -208,7 +205,6 @@ textArea{
   position: absolute;
   top: 20px;
   left: 20px;
-  width: 40px; 
-  height: 40px; 
+  font-size: 25px; 
 }
 </style>

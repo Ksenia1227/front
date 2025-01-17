@@ -35,8 +35,8 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color:rgb(41, 42, 42); 
-  padding: 10px 0;
+  background-color:rgb(83, 67, 58); 
+  padding: 15px 0;
 }
 
 .nav-link {
@@ -45,10 +45,11 @@ nav {
   margin: 0 15px;
   text-decoration: none;
   transition: color 0.3s ease;
+  font-size: 18px;
 }
 
 .nav-link:hover {
-  color:rgb(54, 206, 100); 
+  color:rgb(208, 197, 173); 
 }
 
 .nav-link.router-link-exact-active {

@@ -25,27 +25,33 @@ export default {
 
 <style scoped>
 .recipe-card {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  width: 200px;
+  border-radius: 10px; 
+  width: 100%; 
+  max-width: 350px; 
+  margin: 16px;
   padding: 16px;
-  text-align: center;
   background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+}
+
+.recipe-card:hover {
+  transform: translateY(-8px); 
 }
 
 .recipe-image {
   width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 4px;
-}
-
-.recipe-info {
-  margin-top: 10px;
+  height: 250px; 
+  object-fit: cover; 
+  border-radius: 8px; 
 }
 
 h3 {
-  font-size: 1.2em;
-  color: #333;
+  margin-top: 12px;
+  font-size: 1.4em; 
+  font-weight: 600; 
+  color: #030203;
+  line-height: 1.4; 
+  margin: 0;
+  text-align: center; 
 }
 </style>

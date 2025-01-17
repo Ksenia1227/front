@@ -13,14 +13,11 @@ export default {
     },
     actions: {
         async addRecipe(_, { name, description, ingredients, photo }) {
-            console.log( name, description, ingredients, photo)
             const formData = new FormData();
             formData.append('name', name);
             formData.append('description', description);
             formData.append('ingredients', JSON.stringify(ingredients)); 
-            if (photo) {
-                formData.append('photo', photo); 
-            }
+            formData.append('photo', photo); 
             try {
                 const response = await instance.post('/api/recipe/recipes', formData, {
                   headers: {

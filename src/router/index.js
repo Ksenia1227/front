@@ -65,7 +65,7 @@ router.beforeEach(async (to, from, next) => {
       console.log(response.status)
       if (response.status == 200 ) {
         return next()
-      } else if (response.status == 414 ) {
+      } else if (response.status == 401 ) {
         return next('/')
       }
     }

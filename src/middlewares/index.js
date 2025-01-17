@@ -1,6 +1,5 @@
 import axios from "axios"
-// используется для выполнения HTTP-запросов. 
-// В нем настроены экземпляр instance с базовым URL и обработчики для перехвата запросов и ответов.(как интерцепторы)
+// используется для выполнения HTTP-запросов ( обработчики для перехвата запросов и ответов.(как интерцепторы))
 import store from '@/store'
 
 const instance = axios.create({
@@ -11,7 +10,7 @@ const instance = axios.create({
 })
 // Перехватчик запросов
 instance.interceptors.request.use(
-    // перехватчик для всех исходящих запросов.
+    // перехватчик для всех исходящих запросов
     function (config) {
         // config - это объект, который содержит все настройки и параметры, используемые при выполнении HTTP-запроса
         config.headers['x-access-token'] = localStorage.getItem('accessToken')

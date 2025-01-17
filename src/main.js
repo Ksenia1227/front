@@ -4,9 +4,9 @@ import router from './router'
 import store from './store'
 import components from './components/UI'
 import '@fortawesome/fontawesome-free/css/all.css';
+import './assets/styles.css';
 
 const app = createApp(App)
-// создаёт новый экземпляр приложения, используя компонент App.vue как корневой компонент.
 
 components.forEach(component => {
     app.component(component.name, component)
@@ -16,4 +16,4 @@ components.forEach(component => {
 
 app.use(store).use(router).mount('#app')
 // Инициализируются Vuex хранилище и маршрутизатор
-// приложение монтируется в элемент с id="app", то есть в DOM, где будет отображаться ваше приложение
+// приложение привязано к элементу с id="app", то есть в DOM, где будет отображаться ваше приложение

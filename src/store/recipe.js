@@ -16,17 +16,12 @@ export default {
     actions: {
            async getRecipes({ commit }) {
             const recipes = await instance.get('/api/recipe/recipes')
+            console.log(recipes.data)
             recipes.data.reverse()
+            console.log(recipes.data)
             if (recipes) return commit('setRecipes', recipes.data)
             return
         },
-        async getRecipeById(commit, id) {
-            const recipe = await instance.get(`/api/recipe/recipe/${id}`)
-            console.log(recipe)
-            if (recipe) return commit('setRecipes', recipe.data)
-            return
-        },
-
     },
     namespaced: true
 }

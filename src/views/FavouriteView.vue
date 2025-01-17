@@ -1,11 +1,14 @@
 <template>
-  <div class="recipes-page">
-    <h1>Рецепты</h1>
-    <div class="recipes-list">
-     <router-link
+  <div class="home">
+    <div v-if="favourites.length === 0" class="favourites-message">
+      У вас пока нет избранного
+    </div>
+    <div v-else class="recipes-list">
+      <router-link
         v-for="favourite in favourites"
         :key="favourite.recipesId.id"
         :to="`/recipeById/${favourite.recipesId.id}`"
+        class="recipe-card-link"
       >
       <cardRecipe 
         :name="favourite.recipesId.name" 
@@ -39,20 +42,24 @@ export default {
 }
 </script>
 <style scoped>
-.recipes-page {
+.home {
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color:rgb(252, 227, 227);
+  background-image: url('@/assets/569.jpg');
+  background-position: center;
+  min-height: 100vh;
 }
 
-h1 {
-  font-size: 2em;
-  text-align: center;
-  margin-bottom: 20px;
-}
 
 .recipes-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+.recipe-card-link {
+  text-decoration: none;
+}
+.favourites-message {
+  text-align: center;
+  font-size: 50px;
 }
 </style>

@@ -5,7 +5,7 @@
     <form @submit.prevent="go_register">
       <my-input type="email" placeholder="Введите email" v-model:value="email"></my-input>
       <my-input type="password" placeholder="Введите password" v-model:value="password"></my-input>
-      <my-input placeholder="Введите name" v-model:value="name"></my-input>
+      <my-input placeholder="Введите имя" v-model:value="name"></my-input>
       <my-button type="submit" class="signin-button">Регистрация</my-button>
       <span>Уже есть аккаунт? <a href="/" class="signin-link">Войти</a></span>
     </form>
@@ -58,7 +58,7 @@ export default {
   background-color: rgba(223, 223, 223, 0.95); 
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(1, 1, 1, 0.2);
-  width: 400px;
+  width: 500px;
   row-gap: 20px;
   padding: 30px;
   display: flex;

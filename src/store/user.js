@@ -22,7 +22,6 @@ export default {
         async getUserByUid({ commit }) {
             const user = await instance.get('/api/user/user')
             if (user) return commit('setUser', user.data)
-            console.log(user);
             return
         },
         async getRecipesByUId({ commit }) {

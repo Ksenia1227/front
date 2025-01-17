@@ -1,14 +1,16 @@
 <template>
-  <div class="recipe-container">
+  <div class="home">
     <div class="recipe-header">
-    <div v-html="logOutIcon" class="home-icon" @click="goBack" ></div>
+    <div class="home-icon" @click="goBack">
+  <i class="fas fa-arrow-left"></i> 
+</div>
     <div class="heart" @click="addFavourite">
         <i :class="favourite ? 'fas fa-heart' : 'far fa-heart'"></i>
       </div>
 
 
       <h1 class="recipe-title">{{ recipes.name }}</h1>
-      <div class="ingredients-section">
+      <div>
       <h3 class="ingredients-title">Ингредиенты:</h3>
       <ul class="ingredients-list">
         <li class="ingredient-item" v-for="ingredient in ingredients" :key="ingredient.id">
@@ -21,7 +23,7 @@
       <img :src="`${serverUrl}/${recipes.photo}`" alt="Рецепт" class="recipe-image"  />
     </div>
      <div v-if = "res" class="delete" @click="deleteRecipe(recipeId)">
-     <h3>Удалить </h3>
+     <h3>Удалить</h3>
      </div>
       <div v-if = "res" class="editing" @click="editingRecipe"> <h3>Редактировать</h3>
      </div>
@@ -53,14 +55,12 @@ export default {
       getFavouriteByUId: 'recipeById/getFavouriteByUId',
       addFavouriteByUId: 'recipeById/addFavouriteByUId',
       deleteRecipe: 'recipeById/deleteRecipe',
-      getUserByUid: 'recipeById/getUserByUid',
       getSravnenie: 'recipeById/sravnenie',
     }),
      goBack() {
       this.$router.go(-1); 
     },
      editingRecipe() {
-      console.log(this.recipeId)
       this.$router.push({ path: `/editingRecipe/${this.recipeId}` });
     },
     async addFavourite() {
@@ -73,25 +73,23 @@ export default {
     await this.getRecipeById(this.recipeId);
     await this.getIngredientsById(this.recipeId);
     await this.getFavouriteByUId(this.recipeId);
-    await this.getUserByUid(); 
     await this.getSravnenie();
     this.favourite = this.$store.state.recipeById.favourite;
-
   },
 };
 </script>
 
 <style scoped>
-.recipe-container {
-  background-image: url('@/assets/789.jpg');
-  background-color: rgba(73, 73, 73, 0.8);   
-  opacity: 0.9;  
+.home {
+  background-color:rgb(255, 228, 228);
+  background-image: url('@/assets/569.jpg');
   background-size: cover;  
   background-position: center;  
   min-height: 100vh;  
   display: flex;  
   justify-content: center;  
   align-items: center;
+  padding: 10px;
 }
 
 .recipe-header {
@@ -103,15 +101,14 @@ export default {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  
   display: flex;  
   flex-direction: column;  
-  padding: 20px;
+  padding: 30px;
 }
 
 .home-icon { 
   position: absolute; 
   top: 20px; 
-  left: 10px; 
-  width: 40px;  
-  height: 40px;  
+  left: 20px; 
+  font-size: 25px; 
 }
 
 .heart {
@@ -143,7 +140,7 @@ export default {
 }
 
 .recipe-description {
-  text-align: justify; 
+  text-align: center; 
   font-size: 20px;
   margin: 20px 10px; 
 }
@@ -154,7 +151,7 @@ export default {
 }
 
 .recipe-image {
-  max-width: 100%;
+  max-width: 80%;
   height: auto;
   border-radius: 8px;
 }
@@ -162,11 +159,14 @@ export default {
 .delete, .editing {
   cursor: pointer;
   text-align: center;
-   font-size: 20px;
+  font-size: 20px;
+  margin-bottom: 10px; 
 }
 .recipe-title {
-  font-size: 40px;
+  font-size: 37px;
   margin-right: 10px;
   font-weight: bold;
+  margin-bottom: 30px; 
+  margin-top: 30px; 
 }
 </style>

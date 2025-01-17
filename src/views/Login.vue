@@ -53,7 +53,7 @@ export default {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(1, 1, 1, 0.2);
   width: 100%;
-  max-width: 400px; 
+  max-width: 500px; 
   display: flex;
   flex-direction: column;
   gap: 20px;

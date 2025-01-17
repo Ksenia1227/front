@@ -1,5 +1,5 @@
 <template> 
-  <div class="add-recipe-page"> 
+  <div class="home"> 
     <div class="form-container"> 
       <h1>Новый рецепт</h1> 
       <form @submit.prevent="submitRecipe"> 
@@ -79,10 +79,10 @@ export default {
 </script> 
 
 <style scoped> 
-.add-recipe-page {
-  background-image: url('@/assets/789.jpg');
+.home{
   background-color: rgba(73, 73, 73, 0.8); 
   background-size: cover;  
+  background-image: url('@/assets/569.jpg');
   opacity:0.9; 
   background-position: center; 
   min-height: 100vh; 
@@ -104,14 +104,14 @@ export default {
 h1 { 
   text-align: center; 
   font-size: 30px; 
-  color: #333;  
+  color: #030203;  
   font-weight: 700; 
   margin-bottom: 10px; 
 }
 h2 { 
   text-align: center; 
   font-size: 22px; 
-  color: #333;  
+  color: #030203;  
   font-weight: 600; 
   margin-bottom: 20px; 
 }
@@ -128,6 +128,7 @@ textArea{
   padding: 10px;
   font-size: 14px; 
   gap:10px;
+  color: #030203;
 }
 
 .ingredient-group { 

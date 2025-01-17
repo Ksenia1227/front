@@ -25,9 +25,9 @@ export default {
         setFavourites(state, favourite) {
             state.favourite = favourite
         },
-        setUser(state, user) {
-            state.user = user
-        },
+        // setUser(state, user) {
+        //     state.user = user
+        // },
         setSrav(state, res) {
             state.res = res
         },
@@ -37,7 +37,7 @@ export default {
             try {
                 const recipes = await instance.get(`/api/recipe/recipe/${id}`)
                 if (recipes.data) {
-                    commit('setRecipes', recipes.data) 
+                    commit('setRecipes', recipes.data)                    
                 }
             } catch (error) {
                 console.error("Ошибка при загрузке рецептов:", error)
@@ -45,11 +45,12 @@ export default {
         },
         async getIngredientById({ commit }, id) {
             try {
-                console.log(id)
                 const ingredients = await instance.get(`/api/ingredient/ingredients/${id}`)
-                if (ingredients.data) {
-                    commit('setIngredients', ingredients.data)
-                }
+                console.log(ingredients.data)
+                if (ingredients.data) { 
+                    ingredients.data.sort((a, b) => a.id - b.id);
+                    commit('setIngredients', ingredients.data); 
+                } 
             } catch (error) {
                 console.error("Ошибка при загрузке ингредиентов:", error)
             }
@@ -68,10 +69,9 @@ export default {
         },
         async addFavouriteByUId(_, id_recipe) {
             try {
-                const favourites = await instance.post(`/api/favourites/favourites`, {
+                await instance.post(`/api/favourites/favourites`, {
                     id_recipe
                 })
-                console.log(favourites)
             } catch (error) {
                 console.error("Ошибка при загрузке избранного:", error)
             }
@@ -79,7 +79,11 @@ export default {
         async deleteRecipe(_, id) {
             try {
                 console.log(id)
+                const favourite = await instance.get(`/api/favourites/favouriteById/${id}`)
+                console.log(favourite)
+                if(favourite){
                 await instance.delete(`/api/favourites/favourites/${id}`)
+                }
                 const response = await instance.delete(`/api/recipe/recipes/${id}`)
                 if (response.status == 200) {
                     window.alert('Вы успешно удалили рецепт')
@@ -89,16 +93,18 @@ export default {
                 console.error("Ошибка при удалении рецепта:", error)
             }
         },
-        async getUserByUid({ commit }) {
-             const user = await instance.get('/api/user/user')
-            if (user){ commit('setUser', user.data)
-            }
-            return
-        },
+        // async getUserByUid({ commit }) {
+        //      const user = await instance.get('/api/user/user')
+        //     if (user){ commit('setUser', user.data)
+        //     }
+        //     return
+        // },
         async sravnenie({ commit, state }){
-          if ( state.user.uid === state.recipes.uid){
+        const userId =localStorage.getItem('uid')
+          if ( userId === state.recipes.uid){
             commit('setSrav', true)
           }else{
+            console.log("false")
             commit('setSrav', false)
           }
         }

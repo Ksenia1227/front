@@ -1,11 +1,12 @@
 <template>
-  <div class="recipes-page">
+  <div class="home">
     <h1>Рецепты</h1>
     <div class="recipes-list">
       <router-link
         v-for="recipe in recipes"
         :key="recipe.id"
         :to="`/recipeById/${recipe.id}`"
+        class="recipe-card-link"
       >
         <cardRecipe 
           :name="recipe.name" 
@@ -38,21 +39,32 @@ export default {
     }
 }
 </script>
+
 <style scoped>
-.recipes-page {
+
+.home {
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color:rgb(252, 227, 227);
+  background-image: url('@/assets/569.jpg');
+  background-position: center;
+  min-height: 100vh;
 }
 
-h1 {
-  font-size: 2em;
+h1 { 
+  text-align: center; 
+  font-size: 50px;  
   text-align: center;
-  margin-bottom: 20px;
+  font-weight: 700; 
+  margin-bottom: 30px; 
 }
 
 .recipes-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
 }
+.recipe-card-link {
+  text-decoration: none;
+}
+
 </style>
+

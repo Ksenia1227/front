@@ -33,10 +33,10 @@ export default {
         async getIngredientById({ commit }, id) {
             try {
                 const ingredients = await instance.get(`/api/ingredient/ingredients/${id}`)
-                if (ingredients.data) {
-                    commit('setIngredients', ingredients.data)
-                    console.log(ingredients.data)
-                }
+                if (ingredients.data) { 
+                    ingredients.data.sort((a, b) => a.id - b.id);
+                    commit('setIngredients', ingredients.data); 
+                } 
             } catch (error) {
                 console.error("Ошибка при загрузке ингредиентов:", error)
             }
@@ -49,21 +49,12 @@ export default {
             }
         },
         async updateRecipeByUid(_, { name, description, ingredients, photo, recipeId }) {
-            // const data = {
-            //     recipeId,
-            //     name,
-            //     description,
-            //     ingredients,
-            //     photo
-            // }
             const formData = new FormData();
             formData.append('name', name);
             formData.append('description', description);
             formData.append('ingredients', ingredients); 
             formData.append('recipeId', recipeId);
-            if (photo) {
-                formData.append('photo', photo); 
-            }
+            formData.append('photo', photo); 
             try {
                 console.log(name, JSON.stringify(ingredients), photo,)
                 const response = await instance.put(`/api/recipe/upDateRecipes`, formData, {
