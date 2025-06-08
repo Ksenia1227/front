@@ -7,6 +7,8 @@ import AddRecipe from '../views/AddRecipe.vue'
 import Favourite from '../views/FavouriteView.vue'
 import RecipeById from '../views/RecipeById.vue'
 import EditingRecipe from '../views/EditingRecipe.vue'
+import RejectedApllications from '../views/RejectedApplications.vue'
+import NewApllications from '../views/NewApplications.vue'
 import instance from '@/middlewares'
 
 const routes = [
@@ -34,7 +36,7 @@ const routes = [
   {
     path: '/addRecipe',
     name: 'addRecipePage',
-    component: AddRecipe
+    component: AddRecipe,
   },
   {
     path: '/favourite',
@@ -51,6 +53,16 @@ const routes = [
     name: 'editingRecipe',
     component: EditingRecipe
   },
+    {
+    path: '/rejectedApplic',
+    name: 'rejectedPage',
+    component: RejectedApllications
+  },
+    {
+    path: '/newApplications',
+    name: 'moderatorPage',
+    component: NewApllications
+  },
  ]
 
 const router = createRouter({
@@ -62,7 +74,6 @@ router.beforeEach(async (to, from, next) => {
     const requireAuth = to.matched.some(record => record?.meta.auth)
     if (requireAuth) {
       const response = await instance.get('/api/user/user')
-      console.log(response.status)
       if (response.status == 200 ) {
         return next()
       } else if (response.status == 401 ) {

@@ -34,7 +34,6 @@ export default {
     getters: {
     },
     mutations: {
-        // изменение состояния
         setAuth(state, isAuth) {
             state.isAuth = isAuth
         }
@@ -42,7 +41,6 @@ export default {
     actions: {
         async register(_, { email, password, name }) {
             const response = await fetch(`${process.env.VUE_APP_SERVER}/api/auth/signup`, {
-                //  fetch - функция, которая используется для выполнения HTTP-запросов к серверу
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
@@ -72,10 +70,10 @@ export default {
             if (!checkStatuses(response.status)) return
             const result = await response.json()
             commit('setAuth', true)
-            // вызов мутации (изменение состояния), setAuth - название мутации
             localStorage.setItem('accessToken', result.accessToken)
             localStorage.setItem('refreshToken', result.refreshToken)
             localStorage.setItem('uid', result.uid)
+            localStorage.setItem('role', result.role)
             router.push('/main')
             return
         },
@@ -84,10 +82,10 @@ export default {
             localStorage.removeItem('accessToken')
             localStorage.removeItem('refreshToken')
             localStorage.removeItem('uid')
+            localStorage.removeItem('role')
             router.push('/')
         },
         async changeAccess() {
-            console.log(localStorage.getItem('refreshToken'));
             const response = await instance.post('/api/auth/change-access', {}, {
                 headers: {
                     'x-refresh-token': localStorage.getItem('refreshToken')

@@ -12,10 +12,11 @@ export default {
     mutations: {
     },
     actions: {
-        async addRecipe(_, { name, description, ingredients, photo }) {
+        async addRecipe(_, { name, description, number_portion, ingredients, photo }) {
             const formData = new FormData();
             formData.append('name', name);
             formData.append('description', description);
+            formData.append('number_portion', number_portion);
             formData.append('ingredients', JSON.stringify(ingredients)); 
             formData.append('photo', photo); 
             try {

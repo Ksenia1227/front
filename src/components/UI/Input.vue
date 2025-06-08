@@ -18,6 +18,6 @@ export default {
 .input {
     padding: 10px 15px;
     border: 1px solid black;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 </style>

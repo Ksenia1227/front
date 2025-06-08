@@ -48,21 +48,21 @@ export default {
                 console.error("Ошибка удалении ингредиента", error)
             }
         },
-        async updateRecipeByUid(_, { name, description, ingredients, photo, recipeId }) {
+        async updateRecipeByUid(_, { name, description, number_portion, ingredients, photo, recipeId, status }) {
             const formData = new FormData();
             formData.append('name', name);
             formData.append('description', description);
+            formData.append('number_portion', number_portion);
             formData.append('ingredients', ingredients); 
             formData.append('recipeId', recipeId);
             formData.append('photo', photo); 
+            formData.append('status', status); 
             try {
-                console.log(name, JSON.stringify(ingredients), photo,)
                 const response = await instance.put(`/api/recipe/upDateRecipes`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     }
                 })
-                console.log(response.status)
                 if (response.status === 200) {
                     window.alert('Вы успешно обновили рецепт')
                     router.go(-1)

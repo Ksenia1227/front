@@ -4,20 +4,29 @@
     <div class="home-icon" @click="goBack">
   <i class="fas fa-arrow-left"></i> 
 </div>
-    <div class="heart" @click="addFavourite">
-        <i :class="favourite ? 'fas fa-heart' : 'far fa-heart'"></i>
-      </div>
+<div class="heart" @click="addFavourite" v-if="this.recipes.status !== 'rejected' && this.recipes.status !== 'pending' && !isModerator">
+    <i :class="favourite ? 'fas fa-heart' : 'far fa-heart'"></i>
+</div>
 
-
+      <div class="title-status-wrapper">
       <h1 class="recipe-title">{{ recipes.name }}</h1>
+        <div v-if = "res || isModerator" class="recipe-status" :class="statusClass">
+          {{ statusText }}
+        </div>
+      </div>
       <div>
       <h3 class="ingredients-title">Ингредиенты:</h3>
       <ul class="ingredients-list">
-        <li class="ingredient-item" v-for="ingredient in ingredients" :key="ingredient.id">
-          {{ ingredient.name }} - {{ ingredient.number }}
+        <li class="ingredient-item" v-for="ingredient in originalIngredients" :key="ingredient.id">
+          {{ ingredient.name }} - {{ ingredient.number }} - {{ ingredient.measure }} 
         </li>
       </ul>
     </div>
+  <div class="recipe-portion-wrapper">
+  <button class="portion-btn" @click="decreasePortion"><i class="fas fa-minus"></i></button>
+  <h2 class="recipe-portion">Количество порций: {{ recipes.number_portion }}</h2>
+ <button class="portion-btn" @click="increasePortion"><i class="fas fa-plus"></i></button>
+</div>
       <p class="recipe-description">{{ recipes.description }}</p>
     <div class="recipe-image-container">
       <img :src="`${serverUrl}/${recipes.photo}`" alt="Рецепт" class="recipe-image"  />
@@ -25,8 +34,12 @@
      <div v-if = "res" class="delete" @click="deleteRecipe(recipeId)">
      <h3>Удалить</h3>
      </div>
-      <div v-if = "res" class="editing" @click="editingRecipe"> <h3>Редактировать</h3>
+      <div v-if = "res || isModerator" class="editing" @click="editingRecipe"> <h3>Редактировать</h3>
      </div>
+     <div v-if ="isModerator" class="status-buttons">
+            <button type="button" @click="changeStatus('approved')" class="approve-btn">Одобрить</button>
+            <button type="button" @click="changeStatus('rejected')" class="reject-btn">Отклонить</button>
+          </div>
      </div>
   </div>
 </template>
@@ -43,10 +56,31 @@ export default {
       serverUrl: process.env.VUE_APP_SERVER,
       logOutIcon: feather.icons['log-out'].toSvg(),
       favourite: null,
+      originalPortion: 1,
+      originalIngredients: [],
+      status:null
       };
   },
   computed: {
     ...mapState('recipeById', ['res', 'recipes', 'ingredients']), 
+    isModerator() {
+    return localStorage.getItem('role') === 'moderator'
+  },
+  statusText() {
+  switch (this.recipes.status) {
+    case 'pending': return 'Ожидание';
+    case 'rejected': return 'Отклонено';
+    case 'approved': return 'Одобрено';
+    default: return this.recipes.status || '';
+  }
+},
+    statusClass() {
+      return {
+        'status-pending': this.recipes.status === 'pending',
+        'status-rejected': this.recipes.status === 'rejected',
+        'status-approved': this.recipes.status === 'approved'
+      };
+    }
   },
   methods: {
     ...mapActions({
@@ -56,6 +90,7 @@ export default {
       addFavouriteByUId: 'recipeById/addFavouriteByUId',
       deleteRecipe: 'recipeById/deleteRecipe',
       getSravnenie: 'recipeById/sravnenie',
+      updateStatus: 'recipeById/updateStatus'
     }),
      goBack() {
       this.$router.go(-1); 
@@ -67,6 +102,37 @@ export default {
         await this.addFavouriteByUId(this.recipeId); 
         this.favourite = !this.favourite; 
     },
+    increasePortion() {
+    if (this.recipes.number_portion < 50) {
+      this.recipes.number_portion += 1;
+      this.updateIngredientAmounts();
+    }
+  },
+  decreasePortion() {
+    if (this.recipes.number_portion > 1) {
+      this.recipes.number_portion -= 1;
+      this.updateIngredientAmounts();
+    }
+  },
+  async changeStatus(status) {
+      this.updateStatus({
+      recipeId: this.recipes.id,
+      status: status
+       })
+    },
+  updateIngredientAmounts() {
+  this.originalIngredients = this.ingredients.map((ingredient) => {
+  const ratio = ingredient.number /this.originalPortion;
+  const newValue = (this.recipes.number_portion * ratio);
+  const newNumber = Number.isInteger(newValue)
+  ? newValue
+  : +newValue.toFixed(2);
+  return {
+      ...ingredient,
+      number: newNumber
+    };
+});
+  },
   },
   async mounted() {
     this.recipeId = this.$route.params.id;
@@ -75,6 +141,8 @@ export default {
     await this.getFavouriteByUId(this.recipeId);
     await this.getSravnenie();
     this.favourite = this.$store.state.recipeById.favourite;
+    this.originalPortion = this.recipes.number_portion;
+  this.originalIngredients = JSON.parse(JSON.stringify(this.ingredients));
   },
 };
 </script>
@@ -162,11 +230,85 @@ export default {
   font-size: 20px;
   margin-bottom: 10px; 
 }
-.recipe-title {
+.recipe-title,
+.recipe-portion {
   font-size: 37px;
   margin-right: 10px;
   font-weight: bold;
   margin-bottom: 30px; 
   margin-top: 30px; 
 }
+.recipe-portion-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.portion-btn {
+  background-color: #eee;
+  border: none;
+  padding: 5px 10px;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.title-status-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.recipe-status {
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.status-pending {
+  background-color: #FFF3CD;
+  color: #856404;
+}
+
+.status-rejected {
+  background-color: #F8D7DA;
+  color: #721C24;
+}
+
+.status-approved {
+  background-color: #D4EDDA;
+  color: #155724;
+}
+.status-buttons {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+  justify-content: center;
+}
+
+.status-buttons button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.approve-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.reject-btn {
+  background-color: #F44336;
+  color: white;
+}
+
+.status-buttons button:hover {
+  opacity: 0.8;
+}
+
 </style>

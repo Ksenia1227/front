@@ -6,6 +6,7 @@ import addRecipe from '@/store/addRecipe'
 import favourite from '@/store/favourite'
 import recipeById from '@/store/recipeById'
 import editingRecipe from './editingRecipe'
+import moderator from './moderator'
 
 export default createStore({
   state: {
@@ -23,6 +24,7 @@ export default createStore({
     addRecipe: addRecipe,
     favourite: favourite,
     recipeById:recipeById,
-    editingRecipe: editingRecipe
+    editingRecipe: editingRecipe,
+    moderator:moderator
   }
 })

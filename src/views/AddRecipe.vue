@@ -4,11 +4,13 @@
       <h1>Новый рецепт</h1> 
       <form @submit.prevent="submitRecipe"> 
         <div class="input-recipe"> 
-          <textarea placeholder="Введите название рецепта" v-model="name" required>
+          <textarea placeholder="Введите название рецепта" v-model="name" @input="upperCase()"  required>
           </textarea>
+          <span class="counter">{{ 70 - name.length }} символов осталось</span>
         </div> 
         <div class="input-description"> 
-        <textarea v-model="description" placeholder="Введите описание рецепта" required>
+        <textarea v-model="description" placeholder="Введите описание рецепта" @input="textareaHeight($event)"
+      class="size-textarea" required>
           </textarea>
         </div> 
         <div class="file"> 
@@ -20,10 +22,17 @@
             required 
           /> 
         </div> 
+        <div class="input-portion"> 
+          <my-input  type="text" placeholder="Введите количество  порций" v-model:value="number_portion" @input="filterNumberPortion" required></my-input>
+        </div> 
         <h2>Ингредиенты:</h2>
-        <div v-for="(ingredient, index) in ingredients" :key="index" class="ingredient-group"> 
-          <my-input placeholder="Введите название" v-model:value="ingredients[index].name" required></my-input> 
-          <my-input placeholder="Введите количество" v-model:value="ingredients[index].number" required></my-input> 
+        <div v-for="(ingredient, index) in ingredients" :key="index" class="ingredient-group">
+          <div class="ingredient-name">
+          <my-input placeholder="Введите название" v-model:value="ingredients[index].name" @input="upperCaseName(index)" required></my-input> 
+          <span class="counter">{{ 40 - ingredient.name.length }} символов осталось</span>
+        </div>
+          <my-input  type="text" placeholder="Введите количество" v-model:value="ingredients[index].number" @input="filterIngredientNumber(index)" required></my-input>
+          <my-input placeholder="Введите единицу измерения" v-model:value="ingredients[index].measure" @input="upperCaseMeasure(index)" required></my-input> 
           <button type="button" @click="removeIngredient(index)" class="remove-btn">Удалить ингредиент</button> 
         </div> 
         <div class="button_recipe"> 
@@ -47,29 +56,90 @@ export default {
       name: '', 
       description: '', 
       photo: null, 
-      ingredients: [{name: "", number:""}], 
+      number_portion:'',
+      ingredients: [{name: "", number:"", measure:""}], 
     } 
   }, 
   methods: { 
     ...mapActions({ 
       addRecipe: 'addRecipe/addRecipe', 
     }), 
+     textareaHeight(event) {
+      const textarea = event.target;
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+      this.upperCaseDescription();
+    },
     onFileChange() { 
       this.photo = this.$refs.photo.files[0]; 
     }, 
-
     addIngredient() { 
-      this.ingredients.push({name:"", number:""}) 
+      this.ingredients.push({name:"", number:"", measure:""}) 
     }, 
 
     removeIngredient(index) { 
       this.ingredients.splice(index, 1) 
     }, 
+    upperCaseDescription() {
+      if (this.description) {
+    this.description = this.description.charAt(0).toUpperCase() + this.description.slice(1);
+  }
+},
+    upperCase() {
+      if (this.name) {
+      this.name = this.name.charAt(0).toUpperCase() +this.name.slice(1);
+      if (this.name.length > 70) {
+      this.name = this.name.substring(0, 70);
+    }
+  }
+},
+    upperCaseName(index) {
+      let name = this.ingredients[index].name;
+  if (name) {
+    if (name.length > 0) {
+      name = name.charAt(0).toUpperCase() + name.slice(1);
+    }
+    if (name.length > 40) {
+      name = name.substring(0, 40);
+    }
+    this.ingredients[index].name = name;
+  }
+},
+upperCaseMeasure(index) {
+  let measure = this.ingredients[index].measure;
+    if (measure) {
+      if (measure.length > 0) {
+      measure = measure.charAt(0).toUpperCase() + measure.slice(1);
+    }
+      if (measure.length > 20) {
+        measure = measure.substring(0, 20);
+    }
+    this.ingredients[index].measure = measure.charAt(0).toUpperCase() + measure.slice(1);
+  }
+},
+filterNumberPortion() {
+   let value = this.number_portion.toString();
+  value = value.replace(/[^\d]/g, '');
+  if (value.length > 1) {
+    value = value.replace(/^0+/, '');
+  }
+  this.number_portion = value;
+},
+filterIngredientNumber(index) {
+  let value = this.ingredients[index].number.toString();
+  value = value.replace(',', '.');
+  value = value.replace(/[^0-9.]/g, '');
+  if (/^0[0-9]+/.test(value)) {
+    value = value.replace(/^0+/, '');
+  }
+  this.ingredients[index].number = value;
+},
 
     async submitRecipe() { 
       this.addRecipe({ 
         name: this.name, 
-        description: this.description, 
+        description: this.description,
+        number_portion: this.number_portion, 
         ingredients: this.ingredients, 
         photo: this.photo 
       }) 
@@ -117,7 +187,8 @@ h2 {
 }
 
 .input-recipe, 
-.input-description, 
+.input-description,
+.input-portion, 
 .file { 
   display: flex; 
   flex-direction: column; 
@@ -129,12 +200,14 @@ textArea{
   font-size: 14px; 
   gap:10px;
   color: #030203;
+  resize: none;
 }
 
 .ingredient-group { 
-  display: flex; 
-  margin-bottom: 10px; 
-  gap: 15px; 
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 10px;
 } 
 
 .add-ingredient-btn, 
@@ -181,5 +254,31 @@ textArea{
 .submit { 
   display: flex; 
   justify-content: center; 
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.ingredient-name {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex-grow: 1;
+}
+
+.counter {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+  align-self: flex-end;
+}
+.size-textarea {
+  min-height: 60px; /* Начальная высота */
+  max-height: 300px; /* Максимальная высота */
+  overflow-y: auto; /* Прокрутка при необходимости */
+  resize: none; /* Отключаем ручное изменение размера */
+  white-space: pre-wrap; /* Сохраняем переносы строк */
+  line-height: 1.5; /* Улучшаем читаемость */
 }
 </style>

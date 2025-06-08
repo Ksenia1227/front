@@ -2,9 +2,11 @@
   <nav>
     <router-link v-if="!isAuth" to="/" class="nav-link">Вход</router-link>
     <router-link to="/main" class="nav-link">Главная</router-link>
-    <router-link v-if="isAuth" to="/userPage" class="nav-link">Моя страница</router-link>
-    <router-link v-if="isAuth" to="/addRecipe" class="nav-link">Добавить рецепт</router-link>
-    <router-link v-if="isAuth" to="/favourite" class="nav-link">Избранное</router-link>
+    <router-link v-if="isAuth && !isModerator" to="/userPage" class="nav-link">Моя страница</router-link>
+    <router-link v-if="isAuth && !isModerator" to="/addRecipe" class="nav-link">Добавить рецепт</router-link>
+    <router-link v-if="isAuth  && !isModerator" to="/favourite" class="nav-link">Избранное</router-link>
+    <router-link v-if="isAuth && isModerator" to="/newApplications" class="nav-link">Новые заявки</router-link>
+    <router-link v-if="isAuth && isModerator" to="/rejectedApplic" class="nav-link">Отклоненные заявки</router-link>
     <router-link v-if="isAuth" to="/" @click="logout" class="nav-link">Выйти</router-link>
   </nav>
   <router-view />
@@ -25,7 +27,10 @@ export default {
   computed: {
     ...mapState({ 
       isAuth: state => state.auth.isAuth
-    })
+    }),
+    isModerator() {
+    return localStorage.getItem('role') === 'moderator'
+  }
   }
 }
 </script>
@@ -35,7 +40,7 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color:rgb(83, 67, 58); 
+  background-color:rgb(104, 100, 97); 
   padding: 15px 0;
 }
 
@@ -53,6 +58,6 @@ nav {
 }
 
 .nav-link.router-link-exact-active {
-  color:rgb(54, 206, 100); 
+  color:rgb(101, 94, 152); 
 }
 </style>

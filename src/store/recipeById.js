@@ -107,8 +107,30 @@ export default {
             console.log("false")
             commit('setSrav', false)
           }
-        }
+        },
+        async updateStatus(_, {status, recipeId }) {
+            const formData = new FormData();
+            formData.append('recipeId', recipeId);
+            formData.append('status', status); 
+            try {
+                const response = await instance.put(`/api/recipe/upDateStatus`, formData, {
+                    // headers: {
+                    //     'Content-Type': 'multipart/form-data',
+                    // }
+                })
+                if (response.status === 200) {
+                    window.alert('Вы успешно обновили status')
+                    router.go(-1)
+                } else {
+                    console.log('Error:', response.statusText);
+                    window.alert('Error:', response.statusText)
+                }
+            } catch (error) {
+                console.error('Error while update recipe:', error);
+            }
+        },
 
     },
+    
     namespaced: true
 }
