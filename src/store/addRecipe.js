@@ -19,7 +19,7 @@ export default {
             formData.append('number_portion', number_portion);
             formData.append('ingredients', JSON.stringify(ingredients)); 
             formData.append('photo', photo); 
-            try {
+            try { 
                 const response = await instance.post('/api/recipe/recipes', formData, {
                   headers: {
                     'Content-Type': 'multipart/form-data', 

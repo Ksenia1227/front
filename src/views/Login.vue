@@ -56,7 +56,7 @@ export default {
 .form-container {
   background-color: white;
   padding: 0px;
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 650px;
@@ -78,7 +78,7 @@ export default {
 
 .logo-image {
   width: 650px;
-  border-radius: 8px;
+  border-radius: 10px;
   object-fit: contain;
   opacity: 0.75; 
 }

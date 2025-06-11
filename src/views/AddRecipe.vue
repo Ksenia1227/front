@@ -1,18 +1,24 @@
 <template> 
   <div class="home"> 
     <div class="form-container"> 
-      <h1>Новый рецепт</h1> 
+        <div class="corner top-right"></div>
+        <div class="corner bottom-left"></div>
+        <div class="title-recipe">
+    <h1>Новый рецепт</h1>
+  </div>
       <form @submit.prevent="submitRecipe"> 
-        <div class="input-recipe"> 
-          <textarea placeholder="Введите название рецепта" v-model="name" @input="upperCase()"  required>
+         <div class="input-main-recipe">
+          <div class="input-recipe">
+            <textarea placeholder="Введите название рецепта" v-model="name" @input="upperCase()"  required>
           </textarea>
-          <span class="counter">{{ 70 - name.length }} символов осталось</span>
+          <span class="counter">{{ 60 - name.length }} символов осталось</span>
         </div> 
         <div class="input-description"> 
         <textarea v-model="description" placeholder="Введите описание рецепта" @input="textareaHeight($event)"
       class="size-textarea" required>
           </textarea>
         </div> 
+        <div class="row-inline">
         <div class="file"> 
           <input 
             type="file" 
@@ -22,22 +28,26 @@
             required 
           /> 
         </div> 
-        <div class="input-portion"> 
-          <my-input  type="text" placeholder="Введите количество  порций" v-model:value="number_portion" @input="filterNumberPortion" required></my-input>
+         <div class="input-portion"> 
+          <my-input  type="text" placeholder="Введите количество порций" v-model:value="number_portion" @input="filterNumberPortion" required></my-input>
         </div> 
+        </div>
+        </div>
+        <div class="ingredients">
         <h2>Ингредиенты:</h2>
         <div v-for="(ingredient, index) in ingredients" :key="index" class="ingredient-group">
           <div class="ingredient-name">
           <my-input placeholder="Введите название" v-model:value="ingredients[index].name" @input="upperCaseName(index)" required></my-input> 
-          <span class="counter">{{ 40 - ingredient.name.length }} символов осталось</span>
+          <span class="counter">{{ 30 - ingredient.name.length }} символов осталось</span>
         </div>
           <my-input  type="text" placeholder="Введите количество" v-model:value="ingredients[index].number" @input="filterIngredientNumber(index)" required></my-input>
-          <my-input placeholder="Введите единицу измерения" v-model:value="ingredients[index].measure" @input="upperCaseMeasure(index)" required></my-input> 
+          <my-input placeholder="Введите ед. измерения" v-model:value="ingredients[index].measure" @input="upperCaseMeasure(index)" required></my-input> 
           <button type="button" @click="removeIngredient(index)" class="remove-btn">Удалить ингредиент</button> 
         </div> 
         <div class="button_recipe"> 
           <button type="button" @click="addIngredient()" class="add-ingredient-btn">Добавить ингредиент</button> 
         </div> 
+        </div>
         <div class="submit"> 
           <my-button type="submit" class="submit-btn">Добавить рецепт</my-button> 
         </div>
@@ -88,8 +98,8 @@ export default {
     upperCase() {
       if (this.name) {
       this.name = this.name.charAt(0).toUpperCase() +this.name.slice(1);
-      if (this.name.length > 70) {
-      this.name = this.name.substring(0, 70);
+      if (this.name.length > 60) {
+      this.name = this.name.substring(0, 60);
     }
   }
 },
@@ -99,8 +109,8 @@ export default {
     if (name.length > 0) {
       name = name.charAt(0).toUpperCase() + name.slice(1);
     }
-    if (name.length > 40) {
-      name = name.substring(0, 40);
+    if (name.length > 30) {
+      name = name.substring(0, 30);
     }
     this.ingredients[index].name = name;
   }
@@ -150,9 +160,8 @@ filterIngredientNumber(index) {
 
 <style scoped> 
 .home{
-  background-color: rgba(73, 73, 73, 0.8); 
+   background-color: #E1C9A9;
   background-size: cover;  
-  background-image: url('@/assets/569.jpg');
   opacity:0.9; 
   background-position: center; 
   min-height: 100vh; 
@@ -162,14 +171,16 @@ filterIngredientNumber(index) {
 } 
 
 .form-container { 
+  position: relative;
   background-color: rgba(255, 255, 255, 0.95);  
-  padding: 40px; 
+  padding: 20px; 
   border-radius: 12px; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-  width: 600px; 
+  max-width: 900px; 
   display: flex; 
   flex-direction: column; 
   gap: 30px; 
+  margin-top: 20px; 
 } 
 h1 { 
   text-align: center; 
@@ -178,75 +189,133 @@ h1 {
   font-weight: 700; 
   margin-bottom: 10px; 
 }
+.title-recipe {
+  background-color: #BACBDB;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 50px;
+  display: inline-block;
+  margin: 0 auto;
+  text-align: center;
+}
 h2 { 
   text-align: center; 
   font-size: 22px; 
   color: #030203;  
   font-weight: 600; 
-  margin-bottom: 20px; 
+   padding-bottom: 20px;
+}
+.input-main-recipe {
+ padding-left: 50px;
+  padding-right: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.ingredients {
+ padding-top: 40px;
+}
+.row-inline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
+.row-inline 
+.row-inline {
+  flex: 1;
+}
+
+.input-portion {
+  flex: 1;
+}
+.file {
+  display: flex;
+  flex-direction: column;
+   margin-right: 80px;
+}
 .input-recipe, 
 .input-description,
-.input-portion, 
-.file { 
+.input-portion
+ { 
   display: flex; 
   flex-direction: column; 
-  margin-bottom: 20px; 
+  margin-bottom: 2px; 
 }
 textArea{
-  border-radius: 12px; 
+  border-radius: 2px; 
   padding: 10px;
-  font-size: 14px; 
-  gap:10px;
-  color: #030203;
+  font-size: 16px; 
   resize: none;
+  border: 1px solid black;
 }
 
 .ingredient-group { 
   display: flex;
   align-items: flex-start;
   gap: 15px;
+  
   margin-bottom: 10px;
 } 
 
-.add-ingredient-btn, 
+
 .submit-btn { 
-  padding: 15px 80px; 
-  font-size: 16px; 
-  background-color: rgb(40, 165, 42); 
-  color: white; 
+  padding: 15px 50px; 
+  font-size: 18px; 
+  background-color: #BACBDB; 
+  color: rgb(0, 0, 0); 
   border: none; 
   cursor: pointer; 
-  border-radius: 8px; 
+  font-weight: 700; 
+  border-radius: 25px; 
   transition: background-color 0.3s ease, transform 0.3s ease; 
+    border: 1px solid black;
+}
+.add-ingredient-btn{ 
+  padding: 13px 40px; 
+  font-size: 14px; 
+  background-color: #87807a; 
+  color: rgb(0, 0, 0); 
+  border: none; 
+  cursor: pointer; 
+  font-weight: 700; 
+  border-radius: 25px; 
+  transition: background-color 0.3s ease, transform 0.3s ease; 
+    border: 1px solid black;
 }
 
-.add-ingredient-btn:hover, 
+
+.add-ingredient-btn:hover { 
+   background-color: #534f4b; 
+  transform: scale(1.05); 
+}
 .submit-btn:hover { 
-  background-color: rgb(20, 75, 23); 
+  background-color: #8597a9; 
   transform: scale(1.05); 
 }
 
 .remove-btn { 
-  padding: 5px 10px; 
-  font-size: 12px; 
-  background-color: rgb(179, 22, 56); 
-  color: white; 
+   width: 120px;
+   padding: 4px 20px;
+  font-size: 14px; 
+  background-color: #E4BAB7; 
+  color: rgb(0, 0, 0); 
   border: none; 
   cursor: pointer; 
   border-radius: 5px; 
   transition: background-color 0.3s ease, transform 0.3s ease; 
+   font-weight: 650; 
+   border: 0.5px solid black;
 }
 
 .remove-btn:hover { 
-  background-color: rgb(69, 90, 160); 
+  background-color: #af7672; 
   transform: scale(1.05); 
 }
 
 .button_recipe { 
-  display: flex; 
-  justify-content: center; 
+ display: flex; 
+  justify-content: flex-end; 
   margin-bottom: 20px;
   margin-top: 20px;
 }
@@ -268,17 +337,45 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .counter {
-  font-size: 12px;
-  color: #666;
+  font-size: 14px;
+  color: #171717;
   margin-top: 2px;
   align-self: flex-end;
 }
 .size-textarea {
-  min-height: 60px; /* Начальная высота */
-  max-height: 300px; /* Максимальная высота */
-  overflow-y: auto; /* Прокрутка при необходимости */
-  resize: none; /* Отключаем ручное изменение размера */
-  white-space: pre-wrap; /* Сохраняем переносы строк */
-  line-height: 1.5; /* Улучшаем читаемость */
+  min-height: 60px;
+  max-height: 300px; 
+  overflow-y: auto; 
+  resize: none;
+  white-space: pre-wrap;
+  line-height: 1.5; 
+}
+input,
+textarea,
+button,
+select {
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+}
+.corner {
+  position: absolute;
+  border-style: solid;
+}
+
+.top-right {
+  top: 0;
+  right: 0;
+  border-width: 0 80px 80px 0;
+  border-radius: 3px;
+  border-color: transparent #537da4 transparent transparent;
+
+}
+
+.bottom-left {
+  bottom: 0;
+  left: 0;
+  border-width: 80px 0 0 80px;
+  border-radius:3px;
+  border-color: transparent transparent transparent #537da4;
 }
 </style>

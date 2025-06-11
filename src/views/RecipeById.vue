@@ -1,34 +1,15 @@
 <template>
   <div class="home">
-    <div class="recipe-header">
-    <div class="home-icon" @click="goBack">
-  <i class="fas fa-arrow-left"></i> 
-</div>
-<div class="heart" @click="addFavourite" v-if="this.recipes.status !== 'rejected' && this.recipes.status !== 'pending' && !isModerator">
-    <i :class="favourite ? 'fas fa-heart' : 'far fa-heart'"></i>
-</div>
-
-      <div class="title-status-wrapper">
+       <div class="recipe-columns">
+        <div class="left-column">
+          <div class="home-icon" @click="goBack">
+            <i class="fas fa-arrow-left"></i> 
+          </div>
       <h1 class="recipe-title">{{ recipes.name }}</h1>
         <div v-if = "res || isModerator" class="recipe-status" :class="statusClass">
           {{ statusText }}
         </div>
-      </div>
-      <div>
-      <h3 class="ingredients-title">Ингредиенты:</h3>
-      <ul class="ingredients-list">
-        <li class="ingredient-item" v-for="ingredient in originalIngredients" :key="ingredient.id">
-          {{ ingredient.name }} - {{ ingredient.number }} - {{ ingredient.measure }} 
-        </li>
-      </ul>
-    </div>
-  <div class="recipe-portion-wrapper">
-  <button class="portion-btn" @click="decreasePortion"><i class="fas fa-minus"></i></button>
-  <h2 class="recipe-portion">Количество порций: {{ recipes.number_portion }}</h2>
- <button class="portion-btn" @click="increasePortion"><i class="fas fa-plus"></i></button>
-</div>
-      <p class="recipe-description">{{ recipes.description }}</p>
-    <div class="recipe-image-container">
+          <div class="recipe-image-container">
       <img :src="`${serverUrl}/${recipes.photo}`" alt="Рецепт" class="recipe-image"  />
     </div>
      <div v-if = "res" class="delete" @click="deleteRecipe(recipeId)">
@@ -40,8 +21,33 @@
             <button type="button" @click="changeStatus('approved')" class="approve-btn">Одобрить</button>
             <button type="button" @click="changeStatus('rejected')" class="reject-btn">Отклонить</button>
           </div>
-     </div>
+      </div>
+       <div class="right-column">
+          <div class="heart" @click="addFavourite" v-if="this.recipes.status !== 'rejected' && this.recipes.status !== 'pending' && !isModerator">
+    <i :class="favourite ? 'fas fa-heart' : 'far fa-heart'"></i>
+</div>
+      <h3 class="ingredients-title">Ингредиенты:</h3>
+    <div class="ingredients-container">
+  <div class="ingredient-card" v-for="ingredient in originalIngredients" :key="ingredient.id">
+    <div class="ingredient-line">
+    <div class="ingredient-name">{{ ingredient.name }}</div>
+    <div class="ingredient-info">{{ ingredient.number }} {{ ingredient.measure }}</div>
+    </div>
   </div>
+</div>
+  <div class="recipe-portion-wrapper">
+  <h2 class="recipe-portion">Количество порций:</h2>
+  <button class="portion-btn" @click="decreasePortion"><i class="fas fa-minus"></i></button>
+  <h2>{{ recipes.number_portion }}</h2>
+ <button class="portion-btn" @click="increasePortion"><i class="fas fa-plus"></i></button>
+</div>
+<h3 class="description-title">Описание</h3>
+<div class = "description-card">
+      <p class="recipe-description">{{ recipes.description }}</p>
+      </div>
+     </div>
+      </div>
+     </div>
 </template>
 
 <script>
@@ -149,29 +155,54 @@ export default {
 
 <style scoped>
 .home {
-  background-color:rgb(255, 228, 228);
-  background-image: url('@/assets/569.jpg');
+  background-color:#E1C9A9;
   background-size: cover;  
   background-position: center;  
   min-height: 100vh;  
   display: flex;  
   justify-content: center;  
   align-items: center;
-  padding: 10px;
+  padding: 50px;
+}
+.recipe-columns {
+ display: flex;
+  gap: 40px;
+  justify-content: center;
+  align-items: flex-start;
 }
 
-.recipe-header {
+.left-column {
   position: relative; 
-  text-align: center;
-  width: 900px;  
+    width: 680px;  
   border-radius: 12px;  
   background-color: #f9f9f9; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  
   display: flex;  
   flex-direction: column;  
   padding: 30px;
+   align-items: center;
 }
 
+.right-column {
+   position: relative; 
+    width: 700px;  
+  border-radius: 12px;  
+  background-color: #f9f9f9; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  
+  display: flex;  
+  flex-direction: column;  
+  padding: 30px;
+
+}
+.recipe-image-container {
+  text-align: center;
+  margin: 20px 0;
+}
+.recipe-image {
+  max-width: 90%;
+  height: auto;
+  border-radius: 8px;
+}
 .home-icon { 
   position: absolute; 
   top: 20px; 
@@ -189,75 +220,6 @@ export default {
 
 .heart i {
   color: red;
-}
-
-.ingredients-title {
-  font-size: 22px;
-  margin-right: 10px;
-  font-weight: bold;
-}
-
-.ingredients-list {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.ingredient-item {
-  font-size: 20px;
-}
-
-.recipe-description {
-  text-align: center; 
-  font-size: 20px;
-  margin: 20px 10px; 
-}
-
-.recipe-image-container {
-  text-align: center;
-  margin: 20px 0;
-}
-
-.recipe-image {
-  max-width: 80%;
-  height: auto;
-  border-radius: 8px;
-}
-
-.delete, .editing {
-  cursor: pointer;
-  text-align: center;
-  font-size: 20px;
-  margin-bottom: 10px; 
-}
-.recipe-title,
-.recipe-portion {
-  font-size: 37px;
-  margin-right: 10px;
-  font-weight: bold;
-  margin-bottom: 30px; 
-  margin-top: 30px; 
-}
-.recipe-portion-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.portion-btn {
-  background-color: #eee;
-  border: none;
-  padding: 5px 10px;
-  font-size: 20px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-.title-status-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
 }
 
 .recipe-status {
@@ -282,10 +244,109 @@ export default {
   background-color: #D4EDDA;
   color: #155724;
 }
+.recipe-title{
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 20px; 
+  margin-top: 12px; 
+  background-color: #BACBDB;
+  color: rgb(0, 0, 0);
+  padding: 5px 20px;
+  border-radius: 50px;
+  display: inline-block;
+  margin: 10 auto;
+  text-align: center;
+}
+
+.bottom-left {
+  bottom: 0;
+  left: 0;
+  border-width: 80px 0 0 80px;
+  border-radius:3px;
+  border-color: transparent transparent transparent #537da4;
+}
+.ingredients-title {
+  font-size: 30px;
+  font-weight: bold;
+  background-color: #BACBDB;
+  color: rgb(0, 0, 0);
+  padding: 5px 20px;
+  border-radius: 50px;
+  display: inline-block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.recipe-portion-wrapper{
+  display: flex;
+  gap: 10px;
+  margin-top: 20px; 
+  margin-bottom: 20px; 
+    justify-content: center; 
+  align-items: center; 
+}
+
+.description-title {
+  font-size: 22px;
+  font-weight: bold;
+  background-color: #BACBDB;
+  color: rgb(0, 0, 0);
+  padding: 5px 20px;
+  border-radius: 50px;
+  display: inline-block;
+  margin: 0 auto;
+  text-align: center;
+}
+.ingredient-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 6px 11px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 0.5px solid black;
+}
+.ingredient-name {
+  font-weight: bold;
+  font-size: 17px;
+  color: #121212;
+  margin-bottom: 8px;
+}
+
+.ingredient-info {
+  font-size: 16px;
+  color: #2a2a2a;
+}
+.ingredients-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+  margin-bottom: 15px;
+  margin-top: 20px;
+}
+.ingredient-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.description-card {
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  border: 0.5px solid black;
+  max-height: 250px;
+  overflow-y: auto;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+  margin-top: 15px;
+}
+
 .status-buttons {
   display: flex;
   gap: 10px;
-  margin: 20px 0;
+  margin-top: 20px;
   justify-content: center;
 }
 
@@ -298,17 +359,18 @@ export default {
 }
 
 .approve-btn {
-  background-color: #4CAF50;
-  color: white;
+  background-color: #92ba92;
+  color: #2d5e2d;
 }
 
 .reject-btn {
-  background-color: #F44336;
-  color: white;
+  background-color: #d06868;
+  color: #973333;
 }
 
 .status-buttons button:hover {
   opacity: 0.8;
 }
+
 
 </style>

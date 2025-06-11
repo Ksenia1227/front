@@ -1,13 +1,16 @@
 <template>
   <div class="home">
-    <h1>Рецепты</h1>
     <div class="recipes-list">
       <router-link
-        v-for="recipe in paginatedRecipes"
+        v-for="(recipe, index) in paginatedRecipes"
         :key="recipe.id"
         :to="`/recipeById/${recipe.id}`"
         class="recipe-card-link"
+        :style="getRotationStyle(index)"
       >
+      <div class = "icon"  :style="getPinPositionStyle(index)">
+        <i class="fas fa-map-pin"></i> 
+      </div>
         <cardRecipe 
           :name="recipe.name" 
           :photo="`${serverUrl}/${recipe.photo}`" 
@@ -42,7 +45,8 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from 'vuex';
+import feather from 'feather-icons';
 
 export default {
     name: 'mainPage',
@@ -52,6 +56,7 @@ export default {
             serverUrl:process.env.VUE_APP_SERVER,
             numberPage: 1,
             size: 6,
+            pinIcon: feather.icons['map-pin'].toSvg(),
         }
     },
     computed:{
@@ -78,7 +83,28 @@ pageCount(){
   if (this.numberPage > 1) {
     this.numberPage--;
   }
-  }
+  },
+      getRotationStyle(index) {
+    const angles = [4, -2, 3, -4, 2,-3]; 
+    const angle = angles[index % angles.length];
+    return {
+      transform: `rotate(${angle}deg)`,
+      transition: 'transform 0.3s',
+    };
+  },
+  getPinPositionStyle(index) {
+  const isEven = index % 2 === 0;
+  return {
+    position: 'absolute',
+    top: '6px',
+    fontSize: '25px',
+    color: isEven ? 'rgb(87, 83, 83)': 'rgb(47, 110, 168)',
+    left: isEven ? '26px' : 'auto',
+    right: isEven ? 'auto' : '130px',
+    pointerEvents: 'none',
+    filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.2))',
+  };
+}
     },
     async mounted() {
       await this.getApprovedRecipes()
@@ -115,22 +141,35 @@ h1 {
 .pagination {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
-  gap: 10px;
+  align-items: center;
+  margin: 40px 0;
+  gap: 8px;
 }
+
 .pagination button {
-  padding: 5px 10px;
+  padding: 8px 12px;
   border: none;
-  background-color: #eee;
-  cursor: pointer;
+  background-color: #f8f8f8;
+  color: #1a1a1a;
+  border-radius: 3px;
+  font-weight: 500;
+  font-size: 13px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  min-width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .pagination button.active {
-  background-color: #333;
+  background-color: #537da4;
   color: white;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+  transform: scale(1.05);
 }
 .pagination button:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
+  transform: none !important;
 }
 
 </style>

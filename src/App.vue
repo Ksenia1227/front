@@ -50,14 +50,14 @@ nav {
   margin: 0 15px;
   text-decoration: none;
   transition: color 0.3s ease;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .nav-link:hover {
-  color:rgb(208, 197, 173); 
+  color:rgb(186, 179, 174); 
 }
 
 .nav-link.router-link-exact-active {
-  color:rgb(101, 94, 152); 
+  color:#53a4f6; 
 }
 </style>
