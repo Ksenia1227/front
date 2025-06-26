@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <div v-if="recipes.length > 0" >
     <div class="recipes-list">
       <router-link
         v-for="(recipe, index) in paginatedRecipes"
@@ -41,6 +42,10 @@
     Вперёд
   </button>
 </div>
+</div>
+<div v-else class="loading-text">
+      <p>Загружается...</p>
+    </div>
   </div>
 </template>
 
@@ -55,7 +60,7 @@ export default {
             recipes: [],
             serverUrl:process.env.VUE_APP_SERVER,
             numberPage: 1,
-            size: 6,
+            size: 9,
             pinIcon: feather.icons['map-pin'].toSvg(),
         }
     },
@@ -99,8 +104,9 @@ pageCount(){
     top: '6px',
     fontSize: '25px',
     color: isEven ? 'rgb(87, 83, 83)': 'rgb(47, 110, 168)',
-    left: isEven ? '26px' : 'auto',
-    right: isEven ? 'auto' : '130px',
+    left: '26px',
+    // left: isEven ? '26px' : 'auto',
+    // right: isEven ? 'auto' : '26px',
     pointerEvents: 'none',
     filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.2))',
   };
@@ -118,7 +124,7 @@ pageCount(){
 .home {
   padding: 20px;
   background-color:rgb(252, 227, 227);
-  background-image: url('@/assets/569.jpg');
+  background-image: url('@/assets/569.jpg'); 
   background-position: center;
   min-height: 100vh;
 }
@@ -134,6 +140,8 @@ h1 {
 .recipes-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  justify-items: center; 
+  gap: 20px;
 }
 .recipe-card-link {
   text-decoration: none;
@@ -144,6 +152,7 @@ h1 {
   align-items: center;
   margin: 40px 0;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .pagination button {
@@ -171,6 +180,66 @@ h1 {
   cursor: not-allowed;
   transform: none !important;
 }
+.loading-text{
+  justify-content: center;
+  align-items: center;
+   text-align: center;
+   font-size: 25px;
+  color: #111111;
+}
+@media (max-width: 1100px) {
+h1 { 
+  font-size: 40px;  
+  font-weight: 700; 
+  margin-bottom: 23px; 
+}
+.recipes-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center; 
+  gap: 20px;
+}
+.pagination {
+  margin: 35px 0;
+  gap: 6px;
+}
 
+.pagination button {
+  padding: 6px 10px;
+  font-size: 13px;
+  min-width: 35px;
+}
+@media (max-width: 770px) {
+h1 { 
+  font-size: 35px;  
+  font-weight: 700; 
+  margin-bottom: 20px; 
+}
+.recipes-list {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  justify-items: center; 
+  gap: 15px; 
+  padding: 0 15px; 
+}
+.pagination {
+  margin: 20px 0;
+  gap: 6px;
+}
+
+.pagination button {
+  padding: 6px 10px;
+  font-size: 13px;
+  min-width: 35px;
+}
+.recipe-card-link{
+   width: 100%; 
+    max-width: 350px; 
+}
+.loading-text{
+  font-size: 14px;
+}
+}
+}
 </style>
 

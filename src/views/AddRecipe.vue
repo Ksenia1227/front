@@ -29,7 +29,8 @@
           /> 
         </div> 
          <div class="input-portion"> 
-          <my-input  type="text" placeholder="Введите количество порций" v-model:value="number_portion" @input="filterNumberPortion" required></my-input>
+          <my-input  type="text" placeholder="Введите количество порций" v-model:value="number_portion" @input="filterNumberPortion" required :class="{ 'error-input': hasError }"></my-input>
+          <p v-if="error" class="error-message">{{ error }}</p>
         </div> 
         </div>
         </div>
@@ -68,6 +69,8 @@ export default {
       photo: null, 
       number_portion:'',
       ingredients: [{name: "", number:"", measure:""}], 
+       error: '', 
+       hasError: false
     } 
   }, 
   methods: { 
@@ -130,10 +133,26 @@ upperCaseMeasure(index) {
 filterNumberPortion() {
    let value = this.number_portion.toString();
   value = value.replace(/[^\d]/g, '');
+    if (value === '') {
+    this.number_portion = '';
+    this.error = '';
+    this.hasError = false;
+    return; 
+  }
   if (value.length > 1) {
     value = value.replace(/^0+/, '');
   }
-  this.number_portion = value;
+  // this.number_portion = value;
+   const numericValue = parseInt(value, 10);
+  
+  if (numericValue > 50) {
+    this.error = 'Максимальное количество порций: 50';
+    this.hasError = true;
+  } else {
+    this.error = '';
+    this.hasError = false;
+    this.number_portion = numericValue;
+  }
 },
 filterIngredientNumber(index) {
   let value = this.ingredients[index].number.toString();
@@ -146,6 +165,9 @@ filterIngredientNumber(index) {
 },
 
     async submitRecipe() { 
+    if (this.hasError || this.number_portion > 50) {
+    return; 
+  }
       this.addRecipe({ 
         name: this.name, 
         description: this.description,
@@ -160,7 +182,8 @@ filterIngredientNumber(index) {
 
 <style scoped> 
 .home{
-   background-color: #E1C9A9;
+   background-color:#ECECEE;
+  background-image: url('@/assets/569.jpg');
   background-size: cover;  
   opacity:0.9; 
   background-position: center; 
@@ -174,6 +197,7 @@ filterIngredientNumber(index) {
   position: relative;
   background-color: rgba(255, 255, 255, 0.95);  
   padding: 20px; 
+  width: 90%;
   border-radius: 12px; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
   max-width: 900px; 
@@ -218,10 +242,9 @@ h2 {
 .row-inline {
   display: flex;
   align-items: center;
+  gap: 15px;
   flex-wrap: wrap;
-}
-
-.row-inline 
+} 
 .row-inline {
   flex: 1;
 }
@@ -234,6 +257,7 @@ h2 {
   flex-direction: column;
    margin-right: 80px;
 }
+
 .input-recipe, 
 .input-description,
 .input-portion
@@ -242,6 +266,7 @@ h2 {
   flex-direction: column; 
   margin-bottom: 2px; 
 }
+
 textArea{
   border-radius: 2px; 
   padding: 10px;
@@ -254,10 +279,9 @@ textArea{
   display: flex;
   align-items: flex-start;
   gap: 15px;
-  
   margin-bottom: 10px;
+  flex-wrap: wrap;
 } 
-
 
 .submit-btn { 
   padding: 15px 50px; 
@@ -283,8 +307,6 @@ textArea{
   transition: background-color 0.3s ease, transform 0.3s ease; 
     border: 1px solid black;
 }
-
-
 .add-ingredient-btn:hover { 
    background-color: #534f4b; 
   transform: scale(1.05); 
@@ -377,5 +399,148 @@ select {
   border-width: 80px 0 0 80px;
   border-radius:3px;
   border-color: transparent transparent transparent #537da4;
+}
+.error-input {
+  border: 2px solid red;
+  background-color: #fdd7d7;
+}
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+}
+@media (max-width: 831px) {
+  .ingredient-group { 
+  justify-content: center; 
+} 
+.button_recipe { 
+  justify-content: center; 
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.input-main-recipe {
+ padding-left: 20px;
+  padding-right: 20px;
+  gap: 15px;
+}
+.ingredients {
+ padding-top: 30px;
+}
+}
+@media (max-width: 570px) {
+  .ingredient-group { 
+  justify-content: center; 
+} 
+  h1 { 
+  font-size: 25px; 
+}
+.remove-btn { 
+   width: 110px;
+   padding: 4px 17px;
+  font-size: 12px; 
+}
+.top-right {
+  border-width: 0 70px 70px 0;
+}
+
+.bottom-left {
+  border-width: 70px 0 0 70px;
+}
+.add-ingredient-btn{ 
+  padding: 13px 25px; 
+  font-size: 12px; 
+}
+.button_recipe { 
+  justify-content: center; 
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.submit-btn { 
+  padding: 15px 40px; 
+  font-size: 16px; 
+}
+.file {
+ margin-right: 0px;
+}
+input,
+textarea,
+button,
+select {
+  font-family: 'Arial', sans-serif;
+  font-size: 12px;
+}
+.input-main-recipe {
+ padding-left: 10px;
+  padding-right: 10px;
+  gap: 15px;
+}
+.row-inline{
+  justify-content: center; 
+}
+.ingredients {
+ padding-top: 20px;
+}
+h2 { 
+  font-size: 18px;  
+   padding-bottom: 16px;
+}
+}
+@media (max-width: 345px) {
+  .ingredient-group { 
+  justify-content: center; 
+} 
+  h1 { 
+  font-size: 22px; 
+}
+.remove-btn { 
+   width: 100px;
+   padding: 4px 17px;
+  font-size: 12px; 
+}
+.top-right {
+  border-width: 0 50px 50px 0;
+}
+
+.bottom-left {
+  border-width: 50px 0 0 50px;
+}
+.add-ingredient-btn{ 
+  padding: 13px 15px; 
+  font-size: 11px; 
+}
+.button_recipe { 
+  justify-content: center; 
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.submit-btn { 
+  padding: 12px 30px; 
+  font-size: 14px; 
+}
+.file {
+ margin-right: 0px;
+}
+input,
+textarea,
+button,
+select {
+  font-family: 'Arial', sans-serif;
+  font-size: 11px;
+}
+.input-main-recipe {
+ padding-left: 10px;
+  padding-right: 10px;
+  gap: 15px;
+}
+.ingredients {
+ padding-top: 15px;
+}
+h2 { 
+  font-size: 16px;  
+   padding-bottom: 12px;
+}
+.counter {
+  font-size: 12px;
+}
 }
 </style>

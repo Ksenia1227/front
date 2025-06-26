@@ -33,7 +33,8 @@
           <label>*Если файл не выбран, устанавливается старый</label>
            </div>
            <div class="input-portion"> 
-          <my-input type="text" v-model:value="recipes.number_portion" placeholder="Введите количество  порций" @input="filterNumberPortion" required></my-input>
+          <my-input type="text" v-model:value="recipes.number_portion" placeholder="Введите количество  порций" @input="filterNumberPortion" required :class="{ 'error-input': hasError }"></my-input>
+           <p v-if="error" class="error-message">{{ error }}</p>
         </div> 
         </div>
         </div>
@@ -73,6 +74,8 @@ export default {
       logOutIcon: feather.icons['log-out'].toSvg(),
       idNew: null,
       photo: null,
+      error: '', 
+      hasError: false
       };
   },
   computed: {
@@ -147,10 +150,26 @@ upperCaseMeasure(index) {
 filterNumberPortion() {
    let value = this.recipes.number_portion.toString();
   value = value.replace(/[^\d]/g, '');
+    if (value === '') {
+    this.number_portion = '';
+    this.error = '';
+    this.hasError = false;
+    return; 
+  }
   if (value.length > 1) {
     value = value.replace(/^0+/, '');
   }
-  this.recipes.number_portion = value;
+  // this.recipes.number_portion = value;
+     const numericValue = parseInt(value, 10);
+  
+  if (numericValue > 50) {
+    this.error = 'Максимальное количество порций: 50';
+    this.hasError = true;
+  } else {
+    this.error = '';
+    this.hasError = false;
+    this.number_portion = numericValue;
+  }
 },
 filterIngredientNumber(index) {
   let value = this.ingredients[index].number.toString();
@@ -162,6 +181,9 @@ filterIngredientNumber(index) {
   this.ingredients[index].number = value;
 },
   async submitRecipe() {
+      if (this.hasError || this.number_portion > 50) {
+    return; 
+  }
       this.updateRecipeByUid({
       name: this.recipes.name,
       description: this.recipes.description,
@@ -187,7 +209,7 @@ filterIngredientNumber(index) {
 .home {
   padding: 20px;
   background-color:rgb(122, 122, 122);
-  background-image: url('@/assets/569.jpg');
+   background-image: url('@/assets/569.jpg');
   background-size: cover; 
   background-position: center; 
   min-height: 100vh; 
@@ -243,9 +265,9 @@ h2 {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  gap: 15px;
 }
 
-.row-inline 
 .row-inline {
   flex: 1;
 }
@@ -279,6 +301,7 @@ textArea{
   align-items: flex-start;
   gap: 15px;
   margin-bottom: 10px;
+  flex-wrap: wrap;
 } 
 .submit-btn { 
   padding: 15px 50px; 
@@ -401,6 +424,166 @@ select {
   top: 20px; 
   left: 20px; 
   font-size: 25px; 
+}
+.error-input {
+  border: 2px solid red;
+  background-color: #fdd7d7;
+}
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+}
+@media (max-width: 831px) {
+  .ingredient-group { 
+  justify-content: center; 
+} 
+.button_recipe { 
+  justify-content: center; 
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.input-main-recipe {
+ padding-left: 20px;
+  padding-right: 20px;
+  gap: 15px;
+}
+.ingredients {
+ padding-top: 30px;
+}
+.title-recipe {
+  padding: 12px 20px;
+}
+}
+@media (max-width: 570px) {
+  .ingredient-group { 
+  justify-content: center; 
+} 
+  h1 { 
+  font-size: 22px; 
+}
+.remove-btn { 
+   width: 110px;
+   padding: 4px 17px;
+  font-size: 12px; 
+}
+.top-right {
+  border-width: 0 70px 70px 0;
+}
+
+.bottom-left {
+  border-width: 70px 0 0 70px;
+}
+.add-ingredient-btn{ 
+  padding: 13px 25px; 
+  font-size: 12px; 
+}
+.button_recipe { 
+  justify-content: center; 
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.submit-btn { 
+  padding: 15px 40px; 
+  font-size: 16px; 
+}
+.file {
+ margin-right: 0px;
+}
+input,
+textarea,
+button,
+select {
+  font-family: 'Arial', sans-serif;
+  font-size: 12px;
+}
+.input-main-recipe {
+ padding-left: 10px;
+  padding-right: 10px;
+  gap: 15px;
+}
+.row-inline{
+  justify-content: center; 
+}
+.ingredients {
+ padding-top: 20px;
+}
+h2 { 
+  font-size: 18px;  
+   padding-bottom: 16px;
+}
+.title-recipe {
+  padding: 10px 8px;
+}
+.home-icon { 
+  top: 11px; 
+  font-size: 20px; 
+}
+}
+@media (max-width: 345px) {
+  .ingredient-group { 
+  justify-content: center; 
+} 
+  h1 { 
+  font-size: 18px; 
+}
+.remove-btn { 
+   width: 100px;
+   padding: 4px 17px;
+  font-size: 12px; 
+}
+.top-right {
+  border-width: 0 50px 50px 0;
+}
+
+.bottom-left {
+  border-width: 50px 0 0 50px;
+}
+.add-ingredient-btn{ 
+  padding: 13px 15px; 
+  font-size: 11px; 
+}
+.button_recipe { 
+  justify-content: center; 
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.submit-btn { 
+  padding: 12px 30px; 
+  font-size: 14px; 
+}
+.file {
+ margin-right: 0px;
+}
+input,
+textarea,
+button,
+select {
+  font-family: 'Arial', sans-serif;
+  font-size: 11px;
+}
+.input-main-recipe {
+ padding-left: 10px;
+  padding-right: 10px;
+  gap: 15px;
+}
+.ingredients {
+ padding-top: 15px;
+}
+h2 { 
+  font-size: 16px;  
+   padding-bottom: 12px;
+}
+.counter {
+  font-size: 12px;
+}
+.title-recipe {
+  padding: 10px 6px;
+}
+.home-icon { 
+  top: 10px; 
+  font-size: 16px; 
+}
 }
 
 </style>

@@ -33,10 +33,10 @@ export default {
         async getIngredientById({ commit }, id) {
             try {
                 const ingredients = await instance.get(`/api/ingredient/ingredients/${id}`)
-                if (ingredients.data) { 
+                if (ingredients.data) {
                     ingredients.data.sort((a, b) => a.id - b.id);
-                    commit('setIngredients', ingredients.data); 
-                } 
+                    commit('setIngredients', ingredients.data);
+                }
             } catch (error) {
                 console.error("Ошибка при загрузке ингредиентов:", error)
             }
@@ -49,20 +49,32 @@ export default {
             }
         },
         async updateRecipeByUid(_, { name, description, number_portion, ingredients, photo, recipeId, status }) {
+
+            const role = localStorage.getItem('role')
             const formData = new FormData();
             formData.append('name', name);
             formData.append('description', description);
             formData.append('number_portion', number_portion);
-            formData.append('ingredients', ingredients); 
+            formData.append('ingredients', ingredients);
             formData.append('recipeId', recipeId);
-            formData.append('photo', photo); 
-            formData.append('status', status); 
+            formData.append('photo', photo);
+            formData.append('status', status);
             try {
-                const response = await instance.put(`/api/recipe/upDateRecipes`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    }
-                })
+                let response;
+
+                if (role == "user") {
+                    response = await instance.put(`/api/recipe/upDateRecipes`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        }
+                    });
+                } else {
+                    response = await instance.put(`/api/recipe/upDateRecipesById`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        }
+                    });
+                }
                 if (response.status === 200) {
                     window.alert('Вы успешно обновили рецепт')
                     router.go(-1)

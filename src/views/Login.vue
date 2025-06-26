@@ -48,7 +48,8 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #E1C9A9;
+  background-color: #949494;
+  background-image: url('@/assets/569.jpg');
   padding: 0px;
   margin: 0px;
 }
@@ -60,10 +61,11 @@ export default {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 650px;
+  margin: 20px;
 }
 .form-form {
   background-color: white;
-  padding: 50px;
+  padding: 30px;
   border-radius: 8px;
   width: 100%;
   max-width: 650px;
@@ -77,10 +79,11 @@ export default {
 }
 
 .logo-image {
-  width: 650px;
+  width: 100%;
+  max-width: 650px;
   border-radius: 10px;
   object-fit: contain;
-  opacity: 0.75; 
+  opacity: 0.75;
 }
 .image-title {
   position: absolute; 
@@ -136,5 +139,58 @@ form {
 
 .register-link:hover {
   text-decoration: underline;
+}
+@media (max-width: 580px) {
+   .image-title {
+    font-size: 32px;
+  }
+  .register-text {
+  font-size: 18px;
+}
+.register-link {
+  font-size: 18px;
+}
+.login-button {
+  font-size: 18px;
+  min-width: 50px; 
+}
+}
+@media (max-width: 470px) {
+   .image-title {
+    font-size: 22px;
+  }
+  .login-button {
+  font-size: 14px;
+  min-width: 50px; 
+  padding: 10px 60px; 
+}
+.register-text {
+    margin-top: 6px;
+  font-size: 16px;
+}
+
+.register-link {
+  font-size: 16px;
+}
+}
+@media (max-width: 350px) {
+   .image-title {
+    font-size: 18px;
+  }
+  .login-button {
+  font-size: 12px;
+  min-width: 50px; 
+  padding: 10px 40px; 
+}
+.register-text {
+  margin-top: 5px;
+  font-size: 14px;
+}
+.register-link {
+  font-size: 14px;
+}
+form{
+  gap:10px;
+}
 }
 </style>

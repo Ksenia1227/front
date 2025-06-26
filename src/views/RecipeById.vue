@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <div class="recipe-container">
        <div class="recipe-columns">
         <div class="left-column">
           <div class="home-icon" @click="goBack">
@@ -38,7 +39,7 @@
   <div class="recipe-portion-wrapper">
   <h2 class="recipe-portion">Количество порций:</h2>
   <button class="portion-btn" @click="decreasePortion"><i class="fas fa-minus"></i></button>
-  <h2>{{ recipes.number_portion }}</h2>
+  <h2 class="recipe-number-portion">{{ recipes.number_portion }}</h2>
  <button class="portion-btn" @click="increasePortion"><i class="fas fa-plus"></i></button>
 </div>
 <h3 class="description-title">Описание</h3>
@@ -47,6 +48,7 @@
       </div>
      </div>
       </div>
+     </div>
      </div>
 </template>
 
@@ -155,7 +157,7 @@ export default {
 
 <style scoped>
 .home {
-  background-color:#E1C9A9;
+   background-image: url('@/assets/569.jpg');
   background-size: cover;  
   background-position: center;  
   min-height: 100vh;  
@@ -173,7 +175,9 @@ export default {
 
 .left-column {
   position: relative; 
-    width: 680px;  
+  width: 90%;
+  /* min-width: 400px; */
+  max-width: 680px;  
   border-radius: 12px;  
   background-color: #f9f9f9; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  
@@ -184,8 +188,9 @@ export default {
 }
 
 .right-column {
-   position: relative; 
-    width: 700px;  
+  position: relative; 
+  width: 90%;
+  max-width: 700px;  
   border-radius: 12px;  
   background-color: #f9f9f9; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  
@@ -282,7 +287,7 @@ export default {
   gap: 10px;
   margin-top: 20px; 
   margin-bottom: 20px; 
-    justify-content: center; 
+  justify-content: center; 
   align-items: center; 
 }
 
@@ -371,6 +376,175 @@ export default {
 .status-buttons button:hover {
   opacity: 0.8;
 }
+@media (max-width: 1200px) {
+  .recipe-title{
+  font-size: 25px;
+}
+.recipe-image-container {
+  margin: 16px 0;
+}
+.home-icon { 
+  top: 16px; 
+  left: 16px; 
+  font-size: 20px; 
+}
+.heart { 
+  top: 16px; 
+  right: 26px; 
+  font-size: 30px;  
+}
+.left-column{
+  padding: 20px;
+   /* min-width: 200px; */
+}
+.ingredients-title {
+  font-size: 24px;
+}
+.recipe-columns {
+  gap: 30px;
+}
+.home{
+  padding: 35px;
+}
+}
+@media (max-width: 950px){
+  .recipe-columns {
+    flex-direction: column;
+    align-items: center;
+  }
+  .recipe-title{
+  font-size: 20px;
+}
+.recipe-image-container {
+  margin: 13px 0;
+}
+.home-icon { 
+  top: 15px; 
+  left: 15px; 
+}
+.heart { 
+  top: 15px; 
+  right: 26px; 
+  font-size: 26px;  
+}
+.left-column{
+  padding: 16px; 
+   /* min-width: 100px; */
+}
+.ingredients-title {
+  font-size: 19px;
+}
+.recipe-columns {
+  gap: 26px;
+}
+.home{
+  padding: 15px;
+}
+.ingredient-name {
+  font-size: 13px;
+  margin-bottom: 6px;
+}
 
+.ingredient-info {
+  font-size: 12px;
+}
+.recipe-portion{
+  font-size: 18px;
+}
+.description-title {
+  font-size: 19px;
+}
+.portion-btn{
+  font-size: 16px;
+}
+.recipe-number-portion{
+  font-size: 18px;
+}
+.description-card {
+  padding: 12px 16px;
+  margin-top: 12px;
+}
+.delete, .editing{
+  font-size: 16px;
+}
+}
+@media (max-width: 400px){
+  .recipe-title{
+  font-size: 14px;
+  margin: 10px;
+}
+.recipe-image-container {
+  margin: 10px 0;
+}
+.home-icon { 
+  top: 10px; 
+  left: 15px; 
+  font-size: 16px;
+}
+.heart { 
+  top: 11px; 
+  right: 15px; 
+  font-size: 23px;  
+}
+.left-column{
+  padding: 10px;
+   /* min-width: 50px; */
+}
+.right-column{
+  padding: 11px;
+}
+.ingredients-title {
+  font-size: 16px;
+}
+.recipe-columns {
+  gap: 23px;
+}
+.home{
+  padding: 12px;
+}
+.ingredient-name {
+  font-size: 11px;
+  margin-bottom: 6px;
+}
 
+.ingredient-info {
+  font-size: 11px;
+}
+.recipe-portion{
+  font-size: 16px;
+}
+.description-title {
+  font-size: 16px;
+}
+.portion-btn{
+  font-size: 14px;
+}
+.recipe-number-portion{
+  font-size: 16px;
+}
+.description-card {
+  padding: 12px 16px;
+  margin-top: 12px;
+}
+.recipe-description{
+  font-size: 14px;
+}
+.recipe-portion-wrapper{
+  margin: 8px;
+}
+.recipe-status {
+  padding: 5px 13px;
+  font-size: 10px;
+}
+.delete,.editing{
+  font-size: 12px;
+}
+.status-buttons{
+margin-top: 16px;
+}
+.status-buttons button {
+  padding: 8px 12px;
+font-size: 12px;
+}
+}
 </style>

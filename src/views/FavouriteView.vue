@@ -1,6 +1,9 @@
 <template>
   <div class="home">
-    <div v-if="favourites.length === 0" >
+    <div v-if="favourites===null" class="loading-container">
+    <p class="loading-text">Загружается...</p>
+  </div>
+    <div v-else-if="favourites.length === 0" class="favourites-message">
       <div class="corner top-right"></div>
         <div class="corner bottom-left"></div>
        <p class="empty-title">У вас пока нет избранного</p>
@@ -8,7 +11,8 @@
           Смотреть рецепты
         </router-link>
     </div>
-    <div v-else class="recipes-list">
+     <div v-else>
+    <div class="recipes-list">
       <router-link
   v-for="(favourite, index) in paginatedFavourites"
   :key="favourite.recipesId.id"
@@ -25,7 +29,7 @@
   ></cardRecipe>
 </router-link>  
       </div> 
-    <div class="pagination"  v-if="favourites.length > 0">
+    <div class="pagination">
   <button 
     @click="prevPage" 
     :disabled="numberPage === 1"
@@ -50,6 +54,7 @@
   </button>
 </div>
 </div>
+</div>
 </template>
 
 <script>
@@ -60,7 +65,7 @@ export default {
     name: 'favouritePage',
     data() {
         return {
-            favourites: [],
+            favourites: null,
             serverUrl:process.env.VUE_APP_SERVER,
             numberPage: 1,
             size: 6,
@@ -107,8 +112,9 @@ pageCount(){
     top: '6px',
     fontSize: '25px',
     color: isEven ? 'rgb(87, 83, 83)': 'rgb(47, 110, 168)',
-    left: isEven ? '26px' : 'auto',
-    right: isEven ? 'auto' : '130px',
+    left: '26px',
+    // left: isEven ? '26px' : 'auto',
+    // right: isEven ? 'auto' : '130px',
     pointerEvents: 'none',
     filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.2))',
   };
@@ -124,7 +130,7 @@ pageCount(){
 .home {
   padding: 20px;
   background-color:rgb(252, 227, 227);
-  background-image: url('@/assets/569.jpg');
+   background-image: url('@/assets/569.jpg');
   background-position: center;
   min-height: 100vh;
 }
@@ -162,6 +168,7 @@ pageCount(){
   align-items: center;
   margin: 40px 0;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .pagination button {
@@ -224,5 +231,61 @@ pageCount(){
   position: relative;
   display: inline-block;
 }
+.loading-text{
+  justify-content: center;
+  align-items: center;
+   text-align: center;
+   font-size: 25px;
+  color: #111111;
+}
+.loading-container {
+  display: flex;
+  justify-content: center;  
+  align-items: center;                
+}
 
+@media (max-width: 1100px) {
+
+.recipes-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center; 
+  gap: 20px;
+}
+.pagination {
+  margin: 35px 0;
+  gap: 6px;
+}
+
+.pagination button {
+  padding: 6px 10px;
+  font-size: 13px;
+  min-width: 35px;
+}
+@media (max-width: 770px) {
+.recipes-list {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  justify-items: center; 
+  gap: 10px; 
+  padding: 0 15px; 
+}
+.pagination {
+  margin: 20px 0;
+  gap: 6px;
+}
+
+.pagination button {
+  padding: 6px 10px;
+  font-size: 11px;
+  min-width: 35px;
+}
+.recipe-card-link{
+   width: 100%; 
+  max-width: 350px; 
+}
+.loading-text{
+  font-size: 14px;
+}
+}}
 </style>

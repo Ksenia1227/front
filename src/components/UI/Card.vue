@@ -54,4 +54,55 @@ h3 {
   margin: 0;
   text-align: center; 
 }
+@media (max-width: 1170px) {
+  .recipe-card {
+  width: 100%; 
+  max-width: 330px; 
+  margin: 14px;
+  padding: 16px;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+}
+
+.recipe-image {
+  width: 100%;
+  height: 230px; 
+  object-fit: cover; 
+  border-radius: 8px; 
+}
+
+h3 {
+  margin-top: 10px;
+  font-size: 1.2em; 
+}
+}
+@media (max-width: 370px) {
+  .recipe-card {
+  width: 90%; 
+  max-width: 280px; 
+}
+
+.recipe-image {
+  height: 210px; 
+}
+
+h3 {
+  margin-top: 9px;
+  font-size: 14px; 
+}
+}
+@media (max-width: 270px) {
+  .recipe-card {
+  width: 90%; 
+  max-width: 280px; 
+}
+
+.recipe-image {
+  height: 210px; 
+}
+
+h3 {
+  display: none;
+}
+}
 </style>
